@@ -1,0 +1,205 @@
+/* ==========================================================================
+   Elysium Pizza — Sunlit Artisanal Light Theme Stylesheet
+   Strictly Light Palette across all views, modals, and festive seasons
+   ========================================================================== */
+
+:root {
+  --bg-page: #FAF8F5;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #FFF7ED;
+  --bg-tint: #FFF1F2;
+  --text-primary: #1E293B;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --border-light: #E2E8F0;
+  --border-warm: #F3E8D6;
+  --brand-primary: #E11D48;
+  --brand-primary-hover: #BE123C;
+  --brand-secondary: #EA580C;
+  --brand-accent: #D97706;
+  --brand-badge-bg: #FFE4E6;
+  --brand-badge-text: #9F1239;
+  --banner-grad-start: #FFF1F2;
+  --banner-grad-end: #FEF3C7;
+  --banner-border: #FECDD3;
+  --banner-text: #881337;
+  --shadow-soft: 0 10px 30px -10px rgba(30, 41, 59, 0.07);
+  --shadow-card: 0 4px 20px -2px rgba(30, 41, 59, 0.06);
+  --shadow-hover: 0 16px 36px -8px rgba(225, 29, 72, 0.12);
+}
+
+/* Festive Season Light Theme Palettes (Strictly Light & Airy) */
+body[data-festival="diwali"] {
+  --bg-page: #FFFDF7;
+  --bg-subtle: #FEF3C7;
+  --bg-tint: #FFFBEB;
+  --brand-primary: #D97706;
+  --brand-primary-hover: #B45309;
+  --brand-secondary: #EA580C;
+  --brand-accent: #E11D48;
+  --brand-badge-bg: #FEF3C7;
+  --brand-badge-text: #92400E;
+  --banner-grad-start: #FEF3C7;
+  --banner-grad-end: #FFEDD5;
+  --banner-border: #FDE68A;
+  --banner-text: #78350F;
+}
+
+body[data-festival="holi"] {
+  --bg-page: #FDFCFE;
+  --bg-subtle: #FCE7F3;
+  --bg-tint: #F0FDF4;
+  --brand-primary: #DB2777;
+  --brand-primary-hover: #BE185D;
+  --brand-secondary: #0D9488;
+  --brand-accent: #7C3AED;
+  --brand-badge-bg: #FCE7F3;
+  --brand-badge-text: #9D174D;
+  --banner-grad-start: #FCE7F3;
+  --banner-grad-end: #E0F2FE;
+  --banner-border: #FBCFE8;
+  --banner-text: #831843;
+}
+
+body[data-festival="christmas"] {
+  --bg-page: #F9FBFA;
+  --bg-subtle: #ECFDF5;
+  --bg-tint: #FFF1F2;
+  --brand-primary: #DC2626;
+  --brand-primary-hover: #B91C1C;
+  --brand-secondary: #15803D;
+  --brand-accent: #B45309;
+  --brand-badge-bg: #DCFCE7;
+  --brand-badge-text: #166534;
+  --banner-grad-start: #FFF1F2;
+  --banner-grad-end: #ECFDF5;
+  --banner-border: #BBF7D0;
+  --banner-text: #14532D;
+}
+
+body[data-festival="eid"] {
+  --bg-page: #F8FCFA;
+  --bg-subtle: #ECFDF5;
+  --bg-tint: #FEFCE8;
+  --brand-primary: #059669;
+  --brand-primary-hover: #047857;
+  --brand-secondary: #D97706;
+  --brand-accent: #0D9488;
+  --brand-badge-bg: #D1FAE5;
+  --brand-badge-text: #065F46;
+  --banner-grad-start: #ECFDF5;
+  --banner-grad-end: #FEF9C3;
+  --banner-border: #A7F3D0;
+  --banner-text: #064E3B;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Festive Announcement Bar */
+.festive-ribbon {
+  background: linear-gradient(90deg, var(--banner-grad-start), var(--banner-grad-end));
+  border-bottom: 1px solid var(--banner-border);
+  color: var(--banner-text);
+}
+
+/* Brand Dynamic Classes */
+.btn-brand {
+  background-color: var(--brand-primary);
+  color: #FFFFFF;
+  transition: all 0.2s ease;
+}
+
+.btn-brand:hover {
+  background-color: var(--brand-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px -4px rgba(225, 29, 72, 0.28);
+}
+
+.btn-outline-brand {
+  background-color: #FFFFFF;
+  color: var(--brand-primary);
+  border: 1.5px solid var(--brand-primary);
+  transition: all 0.2s ease;
+}
+
+.btn-outline-brand:hover {
+  background-color: var(--brand-badge-bg);
+}
+
+.badge-brand {
+  background-color: var(--brand-badge-bg);
+  color: var(--brand-badge-text);
+}
+
+.text-brand {
+  color: var(--brand-primary);
+}
+
+.border-brand {
+  border-color: var(--brand-primary);
+}
+
+.surface-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-warm);
+  box-shadow: var(--shadow-card);
+  border-radius: 1rem;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.surface-card:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* Custom Scrollbar (Light & Subtle) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F8FAFC;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Responsive Pizza Studio Visual Preview */
+.pizza-disc-stage {
+  background: radial-gradient(circle at 35% 35%, #FDE68A 0%, #F59E0B 72%, #D97706 100%);
+  box-shadow: inset 0 0 24px rgba(180, 83, 9, 0.25), 0 12px 28px rgba(217, 119, 6, 0.18);
+}
+
+/* Modal Backdrop (Soft Frosted Light Glass — Never Dark!) */
+.light-modal-backdrop {
+  background-color: rgba(248, 250, 252, 0.84);
+  backdrop-filter: blur(8px);
+}
+
+/* Active Nav Tab Pill */
+.nav-pill-active {
+  background-color: var(--brand-badge-bg);
+  color: var(--brand-badge-text);
+  font-weight: 600;
+}

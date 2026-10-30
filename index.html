@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elysium Pizza — Artisanal Wood-Fired Pizzeria &amp; Kitchen</title>
+  <meta name="description" content="Order handcrafted 72-hour sourdough wood-fired pizzas, Triple Treat Feast Boxes, and molten desserts from Elysium Pizza." />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-festival="default" class="min-h-screen flex flex-col selection:bg-rose-100 selection:text-rose-900">
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed top-20 right-4 z-50 flex flex-col gap-2.5 pointer-events-none"></div>
+
+  <!-- Dynamic Festive Season Ribbon (Managed by Admin) -->
+  <div id="festive-ribbon-bar" class="festive-ribbon py-2.5 px-4 text-xs sm:text-sm">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+      <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-white/90 text-rose-800 shadow-sm uppercase tracking-wider">Festive Special</span>
+        <strong id="festive-banner-title" class="font-bold">Warm out of the brick oven: Flat 15% savings on all handcrafted orders today!</strong>
+        <span id="festive-banner-subtitle" class="hidden xl:inline text-xs opacity-90">Apply code ELYSIUM15 at checkout or enjoy complimentary Garlic Herb Knots on orders over ₹799.</span>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button type="button" onclick="copyActivePromoCode()" class="px-3 py-1 rounded-full bg-white/95 border border-amber-300 text-xs font-extrabold text-slate-800 hover:bg-white shadow-sm">
+          <span id="festive-promo-code-pill">ELYSIUM15 • 15% OFF</span> (Tap to Copy)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Sunlit Navigation Header -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-amber-100 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3">
+      <!-- Brand Logo & Crest -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="navigateToSection('hero-section')">
+        <div class="w-11 h-11 rounded-2xl bg-amber-50 border border-rose-200 flex items-center justify-center shadow-sm shrink-0">
+          <svg viewBox="0 0 64 64" class="w-8 h-8" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 21C23 11 41 11 50 21C48.5 24.5 46.5 26 44 26.5C37 19.5 27 19.5 20 26.5C17.5 26 15.5 24.5 14 21Z" fill="#F59E0B" stroke="#B45309" stroke-width="2"/>
+            <path d="M19.5 24.5C26.8 18.5 37.2 18.5 44.5 24.5L33.6 51.2C32.9 52.8 31.1 52.8 30.4 51.2L19.5 24.5Z" fill="#FBBF24" stroke="#D97706" stroke-width="2"/>
+            <circle cx="29" cy="29" r="3.6" fill="#E11D48"/>
+            <circle cx="36.5" cy="34.5" r="3.2" fill="#E11D48"/>
+            <circle cx="31.5" cy="41.5" r="2.6" fill="#DC2626"/>
+            <path d="M27.5 35.5C27.5 32.8 30.2 31.2 32.8 32.2C32.2 34.8 30.2 36.2 27.5 35.5Z" fill="#16A34A"/>
+          </svg>
+        </div>
+        <div>
+          <span class="text-xl font-extrabold tracking-tight text-slate-900 block leading-none">Elysium <span class="text-brand">Pizza</span></span>
+          <span id="active-mode-summary" class="text-[11px] font-medium text-slate-500 block mt-1">Delivery • Park Street Flagship Kitchen</span>
+        </div>
+      </div>
+
+      <!-- Delivery / Carryout / Dine-In Switcher (Desktop) -->
+      <div class="hidden xl:flex items-center bg-amber-50/90 p-1 rounded-full border border-amber-200/80">
+        <button type="button" id="mode-btn-Delivery" onclick="setOrderMode('Delivery')" class="px-3.5 py-1.5 rounded-full text-xs font-semibold btn-brand shadow-sm">🛵 Delivery</button>
+        <button type="button" id="mode-btn-Carryout" onclick="setOrderMode('Carryout')" class="px-3.5 py-1.5 rounded-full text-xs font-medium text-slate-600 hover:text-slate-900">🛍️ Carryout</button>
+        <button type="button" id="mode-btn-Dine-In" onclick="setOrderMode('Dine-In')" class="px-3.5 py-1.5 rounded-full text-xs font-medium text-slate-600 hover:text-slate-900">🍽️ Dine-In</button>
+      </div>
+
+      <!-- Primary Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-1">
+        <button type="button" onclick="navigateToSection('combos-section')" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-rose-700 hover:bg-rose-50/60">Box Deals</button>
+        <button type="button" onclick="navigateToSection('menu-section')" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-rose-700 hover:bg-rose-50/60">Menu</button>
+        <button type="button" onclick="navigateToSection('studio-section')" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-rose-700 hover:bg-rose-50/60">Custom Studio</button>
+        <button type="button" onclick="navigateToSection('tracker-section')" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-rose-700 hover:bg-rose-50/60">Track Order</button>
+        <button type="button" onclick="navigateToSection('blog-section')" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-rose-700 hover:bg-rose-50/60">Journal</button>
+        <button type="button" onclick="navigateToSection('testimonials-section')" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-rose-700 hover:bg-rose-50/60">Reviews</button>
+        <button type="button" onclick="navigateToSection('contact-section')" class="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 hover:text-rose-700 hover:bg-rose-50/60">Contact</button>
+      </nav>
+
+      <!-- Right Action Controls -->
+      <div class="flex items-center gap-2.5">
+        <button type="button" onclick="openAdminPortalModal()" class="px-3 py-2 rounded-xl text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100 transition-all">
+          🔐 Manager Portal
+        </button>
+        <button type="button" onclick="toggleCartDrawer(true)" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold btn-brand flex items-center gap-2 shadow-sm">
+          <span>🛒 Order Basket</span>
+          <span id="header-cart-count" class="px-2 py-0.5 rounded-full bg-white text-rose-700 text-xs font-extrabold">1</span>
+        </button>
+        <button type="button" onclick="toggleMobileNav()" class="lg:hidden p-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 font-bold text-sm">
+          ☰
+        </button>
+      </div>
+    </div>
+
+    <!-- Collapsible Mobile Navigation Drawer -->
+    <div id="mobile-nav-drawer" class="hidden lg:hidden bg-white border-t border-slate-100 px-4 py-4 space-y-3">
+      <div class="flex flex-wrap gap-2">
+        <button type="button" onclick="setOrderMode('Delivery')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-200">🛵 Delivery</button>
+        <button type="button" onclick="setOrderMode('Carryout')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 text-amber-900 border border-amber-200">🛍️ Carryout</button>
+        <button type="button" onclick="setOrderMode('Dine-In')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">🍽️ Dine-In</button>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-100">
+        <button type="button" onclick="navigateToSection('combos-section')" class="p-2.5 rounded-xl bg-slate-50 text-left text-xs font-bold text-slate-800">🎁 Box Deals</button>
+        <button type="button" onclick="navigateToSection('menu-section')" class="p-2.5 rounded-xl bg-slate-50 text-left text-xs font-bold text-slate-800">🍕 Full Menu</button>
+        <button type="button" onclick="navigateToSection('studio-section')" class="p-2.5 rounded-xl bg-slate-50 text-left text-xs font-bold text-slate-800">✨ Custom Studio</button>
+        <button type="button" onclick="navigateToSection('tracker-section')" class="p-2.5 rounded-xl bg-slate-50 text-left text-xs font-bold text-slate-800">🛵 Live Tracker</button>
+        <button type="button" onclick="navigateToSection('blog-section')" class="p-2.5 rounded-xl bg-slate-50 text-left text-xs font-bold text-slate-800">📰 Journal</button>
+        <button type="button" onclick="navigateToSection('testimonials-section')" class="p-2.5 rounded-xl bg-slate-50 text-left text-xs font-bold text-slate-800">★ Guest Reviews</button>
+        <button type="button" onclick="navigateToSection('contact-section')" class="p-2.5 rounded-xl bg-slate-50 text-left text-xs font-bold text-slate-800">📍 Contact &amp; Catering</button>
+        <button type="button" onclick="openAdminPortalModal()" class="p-2.5 rounded-xl bg-amber-50 text-left text-xs font-bold text-amber-900">🔐 Manager Portal</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       CUSTOMER-FACING MAIN VIEW (100% Natural Pizzeria Experience)
+       ======================================================================== -->
+  <main id="customer-main-view" class="flex-1">
+
+    <!-- 1. Sunlit Hero Banner Section -->
+    <section id="hero-section" class="relative overflow-hidden py-10 sm:py-16 border-b border-amber-100 bg-gradient-to-br from-amber-50/70 via-white to-rose-50/50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          <!-- Left Copy Column -->
+          <div class="lg:col-span-7 space-y-5">
+            <div class="flex flex-wrap items-center gap-2">
+              <span id="hero-season-tag" class="px-3.5 py-1 rounded-full text-xs font-extrabold badge-brand tracking-wide uppercase">
+                ARTISANAL WOOD-FIRED KITCHEN
+              </span>
+              <span id="hero-discount-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100/90 text-amber-900 border border-amber-300">
+                15% Festive Savings (ELYSIUM15)
+              </span>
+            </div>
+
+            <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+              72-Hour Cold-Fermented Dough, <span class="text-brand">Blistered at 485°C.</span>
+            </h1>
+
+            <p class="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed">
+              Welcome to <strong>Elysium Pizza</strong>—where Neapolitan sourdough craftsmanship meets generous family sharing boxes, golden stuffed crusts, and steaming hot-box delivery in under 28 minutes.
+            </p>
+
+            <!-- Kitchen Selector & Quick CTAs -->
+            <div class="p-4 rounded-2xl bg-white border border-amber-200/80 shadow-sm max-w-xl space-y-3">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <label for="kitchen-outlet-select" class="text-xs font-bold uppercase text-slate-500">Select Nearest Kitchen:</label>
+                <select id="kitchen-outlet-select" onchange="changeKitchenOutlet(this.value)" class="rounded-xl border border-slate-200 bg-amber-50/50 px-3 py-2 text-xs font-bold text-slate-800">
+                  <option value="Park Street Flagship Kitchen">Park Street Flagship Kitchen (22 mins)</option>
+                  <option value="Ballygunge Circular Wood-Oven">Ballygunge Circular Wood-Oven (20 mins)</option>
+                  <option value="Salt Lake Sector V Studio">Salt Lake Sector V Studio (25 mins)</option>
+                  <option value="New Town Promenade Kitchen">New Town Promenade Kitchen (24 mins)</option>
+                </select>
+              </div>
+              <div class="flex flex-wrap gap-3 pt-1">
+                <button type="button" onclick="navigateToSection('menu-section')" class="px-6 py-3 rounded-xl text-sm font-bold btn-brand shadow-sm">
+                  Explore Wood-Fired Menu →
+                </button>
+                <button type="button" onclick="navigateToSection('studio-section')" class="px-5 py-3 rounded-xl text-sm font-bold btn-outline-brand">
+                  ✨ Craft Custom Pizza
+                </button>
+                <button type="button" onclick="navigateToSection('combos-section')" class="px-4 py-3 rounded-xl text-sm font-semibold bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100">
+                  🎁 Triple Treat Boxes
+                </button>
+              </div>
+            </div>
+
+            <!-- Trust & Culinary Highlights -->
+            <div class="grid grid-cols-3 gap-3 max-w-lg pt-2">
+              <div class="p-3 rounded-xl bg-white/90 border border-amber-100">
+                <div class="text-lg font-extrabold text-slate-900">72 Hours</div>
+                <div class="text-xs text-slate-500">Cold Levain Maturation</div>
+              </div>
+              <div class="p-3 rounded-xl bg-white/90 border border-amber-100">
+                <div class="text-lg font-extrabold text-slate-900">100% DOP</div>
+                <div class="text-xs text-slate-500">San Marzano &amp; Fior di Latte</div>
+              </div>
+              <div class="p-3 rounded-xl bg-white/90 border border-amber-100">
+                <div class="text-lg font-extrabold text-slate-900">4.95 ★</div>
+                <div class="text-xs text-slate-500">12,400+ Happy Diners</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Hero HD Photography Showcase -->
+          <div class="lg:col-span-5">
+            <div class="relative rounded-3xl overflow-hidden border-4 border-white shadow-xl bg-amber-50">
+              <img src="assets/hero_margherita.jpg" alt="Elysium Artisanal Wood-Fired Margherita Pizza" class="w-full h-80 sm:h-96 object-cover max-w-full" />
+              <div class="p-4 bg-white/95 backdrop-blur-sm border-t border-amber-100 flex items-center justify-between gap-3">
+                <div>
+                  <span class="text-[11px] font-bold uppercase text-brand">Chef's Signature Creation</span>
+                  <h2 class="text-base font-extrabold text-slate-900">San Marzano Margherita Regina</h2>
+                  <p class="text-xs text-slate-500">Fior di Latte • Sweet Basil • Extra-Virgin Olive Oil</p>
+                </div>
+                <button type="button" onclick="addMenuItemToCart('pizza-margherita-regina')" class="px-4 py-2.5 rounded-xl text-xs font-bold btn-brand shrink-0">
+                  Order ₹449
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Signature Feast Boxes & Combos (Pizza Hut Triple Treat Inspired) -->
+    <section id="combos-section" class="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-brand">Generous Sharing Value</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Signature Feast Boxes &amp; Combos</h2>
+          <p class="text-sm text-slate-600 mt-1">Complete multi-course pizza boxes curated for family movie nights, house parties, and festive gatherings.</p>
+        </div>
+        <button type="button" onclick="copyActivePromoCode()" class="px-4 py-2 rounded-xl text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200 self-start sm:self-auto">
+          🎟️ Extra Festive Discount Applied in Basket
+        </button>
+      </div>
+
+      <div id="combo-deals-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- 3. Full Handcrafted Menu Section with HD Photos & Filters -->
+    <section id="menu-section" class="py-12 sm:py-16 bg-white/80 border-y border-amber-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-6">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-brand">Fresh From Our 485°C Brick Oven</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Explore the Artisanal Menu</h2>
+            <p id="menu-results-count" class="text-xs font-semibold text-slate-500 mt-1">Showing all handcrafted dishes</p>
+          </div>
+
+          <!-- Search, Dietary & Sort Controls -->
+          <div class="flex flex-wrap items-center gap-2.5">
+            <input
+              id="menu-search-input"
+              type="text"
+              oninput="handleMenuSearch(this.value)"
+              placeholder="Search burrata, truffle, pepperoni, knots..."
+              class="w-full sm:w-64 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:border-rose-400"
+            />
+            <button type="button" id="filter-btn-veg" onclick="toggleDietaryFilter('veg')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200">
+              🌿 Pure Veg Only
+            </button>
+            <button type="button" id="filter-btn-spicy" onclick="toggleDietaryFilter('spicy')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200">
+              🌶️ Spicy
+            </button>
+            <button type="button" id="filter-btn-bestseller" onclick="toggleDietaryFilter('bestseller')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200">
+              ★ Bestsellers
+            </button>
+            <select onchange="handleMenuSort(this.value)" aria-label="Sort menu items" class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700">
+              <option value="featured">Sort: Chef's Featured</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="rating">Highest Guest Rating</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Category Pills -->
+        <div id="menu-category-pills" class="flex flex-wrap gap-2 mb-8"></div>
+
+        <!-- Menu Cards Grid -->
+        <div id="menu-items-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </div>
+    </section>
+
+    <!-- 4. Interactive 4-Step Custom Pizza Studio -->
+    <section id="studio-section" class="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="surface-card p-6 sm:p-10 bg-gradient-to-br from-amber-50/70 via-white to-rose-50/40">
+        <div class="max-w-2xl mb-8">
+          <span class="px-3 py-1 rounded-full text-xs font-extrabold badge-brand uppercase">Interactive Customizer</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">The Elysium Custom Pizza Studio</h2>
+          <p class="text-sm text-slate-600 mt-1">Hand-pick your sourdough crust, size, slow-simmered sauce, finishing drizzle, and gourmet toppings with live calorie and price calculation.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- Left Live Pizza Preview Card -->
+          <div class="lg:col-span-5 surface-card p-6 bg-white text-center space-y-4">
+            <div class="w-48 h-48 sm:w-56 sm:h-56 mx-auto rounded-full pizza-disc-stage flex flex-col items-center justify-center p-6 border-8 border-amber-200/80 relative">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-amber-950 bg-white/90 px-3 py-1 rounded-full shadow-sm">
+                485°C Brick Oven Preview
+              </span>
+              <p id="studio-live-summary" class="text-xs font-bold text-amber-950 mt-2 leading-snug"></p>
+            </div>
+
+            <div>
+              <span class="text-xs font-bold uppercase text-slate-400">Selected Toppings</span>
+              <div id="studio-visual-toppings" class="flex flex-wrap justify-center gap-1.5 mt-2"></div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+              <div class="text-left">
+                <span class="text-xs text-slate-500 block">Custom Pie Total (<span id="studio-live-calories">760 kcal</span>)</span>
+                <span id="studio-live-price" class="text-2xl font-extrabold text-brand">₹714</span>
+              </div>
+              <button type="button" onclick="addCustomStudioPizzaToCart()" class="px-5 py-3 rounded-xl text-sm font-bold btn-brand shadow-sm">
+                + Add Custom Pie to Basket
+              </button>
+            </div>
+          </div>
+
+          <!-- Right 4-Step Controls -->
+          <div class="lg:col-span-7 space-y-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Step 1: Size -->
+              <div class="p-4 rounded-2xl bg-white border border-slate-200">
+                <label for="studio-size-select" class="block text-xs font-extrabold uppercase text-brand">Step 1 • Select Size</label>
+                <select id="studio-size-select" onchange="const [n,p,c]=this.value.split('|'); setStudioOption('size', n, p, c)" class="mt-2 w-full rounded-xl border border-slate-200 bg-amber-50/40 px-3 py-2.5 text-xs font-bold text-slate-800">
+                  <option value="Personal 8&quot; (4 Slices)|329|280">Personal 8" (4 Slices) — ₹329</option>
+                  <option value="Medium 12&quot; (6 Slices)|429|380" selected>Medium 12" (6 Slices) — ₹429</option>
+                  <option value="Large 16&quot; (8 Slices)|599|520">Large 16" (8 Slices) — ₹599</option>
+                  <option value="Party 20&quot; (12 Slices)|799|690">Party 20" (12 Slices) — ₹799</option>
+                </select>
+              </div>
+
+              <!-- Step 2: Crust -->
+              <div class="p-4 rounded-2xl bg-white border border-slate-200">
+                <label for="studio-crust-select" class="block text-xs font-extrabold uppercase text-brand">Step 2 • Artisanal Crust</label>
+                <select id="studio-crust-select" onchange="const [n,p,c]=this.value.split('|'); setStudioOption('crust', n, p, c)" class="mt-2 w-full rounded-xl border border-slate-200 bg-amber-50/40 px-3 py-2.5 text-xs font-bold text-slate-800">
+                  <option value="Hand-Tossed 72h Sourdough|0|240" selected>Hand-Tossed 72h Sourdough (Included)</option>
+                  <option value="Signature Golden Cast-Iron Pan|49|290">Signature Golden Cast-Iron Pan (+₹49)</option>
+                  <option value="Three-Cheese Stuffed Crust|119|360">Three-Cheese Stuffed Crust (+₹119)</option>
+                  <option value="Thin &amp; Airy Roman Scrocchiarella|29|190">Thin &amp; Airy Roman Crisp (+₹29)</option>
+                  <option value="Herbed Cauliflower Gluten-Free|89|170">Herbed Cauliflower Gluten-Free (+₹89)</option>
+                </select>
+              </div>
+
+              <!-- Step 3: Sauce -->
+              <div class="p-4 rounded-2xl bg-white border border-slate-200">
+                <label for="studio-sauce-select" class="block text-xs font-extrabold uppercase text-brand">Step 3 • Slow-Simmered Sauce</label>
+                <select id="studio-sauce-select" onchange="const [n,p,c]=this.value.split('|'); setStudioOption('sauce', n, p, c)" class="mt-2 w-full rounded-xl border border-slate-200 bg-amber-50/40 px-3 py-2.5 text-xs font-bold text-slate-800">
+                  <option value="San Marzano Classic Marinara|0|45" selected>San Marzano Classic Marinara (Included)</option>
+                  <option value="Roasted Garlic Parmesan Bianco|39|85">Roasted Garlic Parmesan Bianco (+₹39)</option>
+                  <option value="Smoky Hickory Bourbon BBQ|39|70">Smoky Hickory BBQ Sauce (+₹39)</option>
+                  <option value="Fresh Sweet Basil Pesto|59|95">Fresh Sweet Basil Pesto (+₹59)</option>
+                </select>
+              </div>
+
+              <!-- Step 4: Finishing Drizzle -->
+              <div class="p-4 rounded-2xl bg-white border border-slate-200">
+                <label for="studio-drizzle-select" class="block text-xs font-extrabold uppercase text-brand">Step 4 • Finishing Drizzle</label>
+                <select id="studio-drizzle-select" onchange="const [n,p,c]=this.value.split('|'); setStudioOption('drizzle', n, p, c)" class="mt-2 w-full rounded-xl border border-slate-200 bg-amber-50/40 px-3 py-2.5 text-xs font-bold text-slate-800">
+                  <option value="Wildflower Hot Honey Drizzle|49|40" selected>Wildflower Hot Honey Drizzle (+₹49)</option>
+                  <option value="Cold-Pressed White Truffle Oil|69|55">Cold-Pressed White Truffle Oil (+₹69)</option>
+                  <option value="Fresh Basil Balsamic Glaze|39|30">Fresh Basil Balsamic Glaze (+₹39)</option>
+                  <option value="No Extra Drizzle|0|0">No Finishing Drizzle (₹0)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Step 5: Gourmet Toppings Multi-Select -->
+            <div class="p-5 rounded-2xl bg-white border border-slate-200">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-extrabold uppercase text-brand">Step 5 • Choose Artisanal Toppings</span>
+                <span class="text-xs text-slate-500">Tap to toggle toppings</span>
+              </div>
+              <div id="studio-toppings-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Live 5-Stage Oven-to-Door Order Tracker -->
+    <section id="tracker-section" class="py-12 sm:py-16 bg-amber-50/50 border-y border-amber-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-6">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-brand">Real-Time Kitchen Transparency</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Live Oven-to-Door Order Tracker</h2>
+          <p class="text-sm text-slate-600 mt-1">Follow your pizza from the moment our pizzaiolo stretches the 72-hour dough to the moment it arrives in our heated delivery bag.</p>
+        </div>
+        <div id="live-order-tracker-card" class="surface-card p-6 sm:p-8 bg-white"></div>
+      </div>
+    </section>
+
+    <!-- 6. The Elysium Journal (Culinary Blog) -->
+    <section id="blog-section" class="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-brand">Stories From Our Wood-Fired Hearth</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">The Elysium Culinary Journal</h2>
+          <p class="text-sm text-slate-600 mt-1">Notes on sourdough fermentation, Italian DOP provenance, and seasonal festive pairings from our chefs.</p>
+        </div>
+      </div>
+      <div id="blog-posts-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- 7. Verified Guest Testimonials & Submit Review -->
+    <section id="testimonials-section" class="py-12 sm:py-16 bg-white/90 border-y border-amber-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div class="lg:col-span-8">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-brand">4.95 ★ Average Across 12,400+ Orders</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1 mb-6">Loved by Pizza Connoisseurs</h2>
+            <div id="testimonials-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+          </div>
+
+          <!-- Leave a Guest Review Form -->
+          <div class="lg:col-span-4 surface-card p-6 bg-amber-50/40">
+            <h3 class="text-lg font-extrabold text-slate-900">Share Your Tasting Notes</h3>
+            <p class="text-xs text-slate-600 mt-1">Dined with us or ordered home delivery recently? Add your review to our guest wall.</p>
+            <form id="guest-review-form" onsubmit="submitGuestTestimonial(event)" class="mt-4 space-y-3">
+              <div>
+                <label for="review-guest-name" class="block text-xs font-bold text-slate-700">Your Name *</label>
+                <input id="review-guest-name" type="text" required placeholder="e.g., Ananya Roy" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800" />
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label for="review-guest-location" class="block text-xs font-bold text-slate-700">Neighbourhood</label>
+                  <input id="review-guest-location" type="text" placeholder="e.g., Salt Lake" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800" />
+                </div>
+                <div>
+                  <label for="review-rating" class="block text-xs font-bold text-slate-700">Rating</label>
+                  <select id="review-rating" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-amber-600">
+                    <option value="5">★★★★★ (5/5)</option>
+                    <option value="4">★★★★☆ (4/5)</option>
+                    <option value="3">★★★☆☆ (3/5)</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label for="review-ordered-dish" class="block text-xs font-bold text-slate-700">Favourite Dish Ordered</label>
+                <input id="review-ordered-dish" type="text" placeholder="e.g., Truffle &amp; Burrata Gold" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800" />
+              </div>
+              <div>
+                <label for="review-comment" class="block text-xs font-bold text-slate-700">Your Review *</label>
+                <textarea id="review-comment" rows="3" required placeholder="Tell us about the crust, toppings, and delivery experience..." class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800"></textarea>
+              </div>
+              <button type="submit" class="w-full py-2.5 rounded-xl text-xs font-bold btn-brand">
+                Publish Guest Review
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Contact Us, Table Reservations & Private Catering Concierge -->
+    <section id="contact-section" class="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-5 space-y-4">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-brand">Hospitality &amp; Events Concierge</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Get in Touch or Book Catering</h2>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Planning a festive family gathering, office celebration, or birthday party? Our culinary team provides custom wood-fired catering boxes and private terrace reservations across our four kitchens.
+          </p>
+
+          <div class="space-y-3 pt-2">
+            <div class="p-4 rounded-2xl bg-white border border-amber-200/80">
+              <div class="text-xs font-extrabold uppercase text-brand">Flagship Kitchen &amp; Sunlit Terrace</div>
+              <p class="text-sm font-bold text-slate-900 mt-0.5">24 Park Street, Celica Park Annex, Kolkata 700016</p>
+              <p class="text-xs text-slate-500 mt-0.5">Open Daily: 11:00 AM – 11:45 PM • Hot-Box Delivery &amp; Dine-In</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-white border border-amber-200/80">
+              <div class="text-xs font-extrabold uppercase text-brand">Direct Concierge Desk</div>
+              <p class="text-sm font-bold text-slate-900 mt-0.5">+91 (033) 4802-9100 • concierge@elysiumpizza.com</p>
+              <p class="text-xs text-slate-500 mt-0.5">Instant support for live orders, dietary customizations &amp; bulk party boxes</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 surface-card p-6 sm:p-8 bg-white">
+          <h3 class="text-lg font-extrabold text-slate-900">Send Us a Message or Catering Request</h3>
+          <form id="customer-contact-form" onsubmit="submitContactInquiry(event)" class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="contact-name" class="block text-xs font-bold text-slate-700">Full Name *</label>
+              <input id="contact-name" type="text" required placeholder="Your full name" class="mt-1 w-full rounded-xl border border-slate-200 bg-amber-50/30 px-3.5 py-2.5 text-xs text-slate-800" />
+            </div>
+            <div>
+              <label for="contact-email" class="block text-xs font-bold text-slate-700">Email Address *</label>
+              <input id="contact-email" type="email" required placeholder="you@example.com" class="mt-1 w-full rounded-xl border border-slate-200 bg-amber-50/30 px-3.5 py-2.5 text-xs text-slate-800" />
+            </div>
+            <div>
+              <label for="contact-phone" class="block text-xs font-bold text-slate-700">Phone Number</label>
+              <input id="contact-phone" type="tel" placeholder="+91 98300 00000" class="mt-1 w-full rounded-xl border border-slate-200 bg-amber-50/30 px-3.5 py-2.5 text-xs text-slate-800" />
+            </div>
+            <div>
+              <label for="contact-topic" class="block text-xs font-bold text-slate-700">Inquiry Type</label>
+              <select id="contact-topic" class="mt-1 w-full rounded-xl border border-slate-200 bg-amber-50/30 px-3.5 py-2.5 text-xs font-semibold text-slate-800">
+                <option value="Private Event &amp; Catering">Private Event &amp; Catering</option>
+                <option value="Table Reservation">Sunlit Terrace Table Reservation</option>
+                <option value="Order Feedback">Recent Order Feedback</option>
+                <option value="Franchise &amp; Partnerships">Partnership Inquiry</option>
+              </select>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="contact-party" class="block text-xs font-bold text-slate-700">Estimated Guests &amp; Preferred Date (Optional)</label>
+              <input id="contact-party" type="text" placeholder="e.g., 25 Guests • Friday Evening, 7:30 PM" class="mt-1 w-full rounded-xl border border-slate-200 bg-amber-50/30 px-3.5 py-2.5 text-xs text-slate-800" />
+            </div>
+            <div class="sm:col-span-2">
+              <label for="contact-message" class="block text-xs font-bold text-slate-700">How Can Our Kitchen Help You? *</label>
+              <textarea id="contact-message" rows="3" required placeholder="Share your event details, preferred pizza boxes, or questions..." class="mt-1 w-full rounded-xl border border-slate-200 bg-amber-50/30 px-3.5 py-2.5 text-xs text-slate-800"></textarea>
+            </div>
+            <div class="sm:col-span-2">
+              <button type="submit" class="px-6 py-3 rounded-xl text-sm font-bold btn-brand">
+                Send Request to Concierge →
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Newsletter Banner (The Golden Crust Society) -->
+    <section class="py-12 bg-gradient-to-r from-rose-50 via-amber-50 to-orange-50 border-t border-amber-200/70">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+        <span class="px-3 py-1 rounded-full text-xs font-extrabold badge-brand uppercase">Member Rewards Club</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Join The Golden Crust Society</h2>
+        <p class="text-sm text-slate-600 max-w-xl mx-auto">
+          Receive secret seasonal menu tastings, festive family box vouchers, and complimentary birthday molten lava cakes straight to your inbox.
+        </p>
+        <form onsubmit="submitNewsletterSignup(event)" class="flex flex-col sm:flex-row gap-2.5 max-w-md mx-auto pt-2">
+          <input
+            id="newsletter-email-input"
+            type="email"
+            required
+            placeholder="Enter your email address..."
+            class="flex-1 rounded-xl border border-amber-300 bg-white px-4 py-3 text-xs sm:text-sm text-slate-800 focus:outline-none focus:border-rose-500"
+          />
+          <button type="submit" class="px-6 py-3 rounded-xl text-xs sm:text-sm font-bold btn-brand shrink-0">
+            Claim Instant Privilege
+          </button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       PROTECTED ADMIN PORTAL & EXTENSIVE DOCUMENTATION VIEW
+       (Only visible after logging in with ADMIN_USERNAME & ADMIN_PASSWORD)
+       ======================================================================== -->
+  <section id="admin-portal-view" class="hidden flex-1 py-8 sm:py-12 bg-amber-50/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <!-- Admin Header Bar -->
+      <div class="surface-card p-5 bg-white flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">● Admin Session Verified</span>
+            <span class="text-xs font-semibold text-slate-500">NeonDB + Netlify Serverless Management Suite</span>
+          </div>
+          <h1 class="text-2xl font-extrabold text-slate-900 mt-1">Elysium Pizza — Executive Admin &amp; Backend Control Center</h1>
+        </div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <button type="button" onclick="exitAdminPortalToSite()" class="px-4 py-2 rounded-xl text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100">
+            ← Preview Live Customer Website
+          </button>
+          <button type="button" onclick="logoutAdminSession()" class="px-4 py-2 rounded-xl text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100">
+            Sign Out
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin Navigation Tabs -->
+      <div id="admin-tabs-navigation" class="flex flex-wrap gap-2"></div>
+
+      <!-- TAB 1: Overview & KPIs -->
+      <div id="admin-pane-overview" class="space-y-6">
+        <div id="admin-kpi-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+
+        <div class="surface-card p-6 bg-white">
+          <h2 class="text-lg font-extrabold text-slate-900">Quick Festive Season Switcher</h2>
+          <p class="text-xs text-slate-600 mt-1">Instantly transform the customer website's festive banner, discount rate, promo code, and sunlit seasonal palette.</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mt-4">
+            <button type="button" onclick="applyFestivalPresetInAdmin('default')" class="p-3.5 rounded-xl border border-rose-200 bg-rose-50/60 text-left hover:shadow-sm">
+              <div class="text-xs font-extrabold text-rose-900">☀️ Default Sunlit</div>
+              <div class="text-[11px] text-slate-600 mt-0.5">ELYSIUM15 • 15% Off</div>
+            </button>
+            <button type="button" onclick="applyFestivalPresetInAdmin('diwali')" class="p-3.5 rounded-xl border border-amber-300 bg-amber-50/80 text-left hover:shadow-sm">
+              <div class="text-xs font-extrabold text-amber-900">🪔 Diwali Lights</div>
+              <div class="text-[11px] text-slate-600 mt-0.5">DIWALI25 • 25% Off</div>
+            </button>
+            <button type="button" onclick="applyFestivalPresetInAdmin('holi')" class="p-3.5 rounded-xl border border-pink-300 bg-pink-50/80 text-left hover:shadow-sm">
+              <div class="text-xs font-extrabold text-pink-900">🎨 Holi Colours</div>
+              <div class="text-[11px] text-slate-600 mt-0.5">HOLI20 • 20% Off</div>
+            </button>
+            <button type="button" onclick="applyFestivalPresetInAdmin('christmas')" class="p-3.5 rounded-xl border border-emerald-300 bg-emerald-50/80 text-left hover:shadow-sm">
+              <div class="text-xs font-extrabold text-emerald-900">🎄 Christmas Jubilee</div>
+              <div class="text-[11px] text-slate-600 mt-0.5">XMAS30 • 30% Off</div>
+            </button>
+            <button type="button" onclick="applyFestivalPresetInAdmin('eid')" class="p-3.5 rounded-xl border border-teal-300 bg-teal-50/80 text-left hover:shadow-sm">
+              <div class="text-xs font-extrabold text-teal-900">🌙 Eid Royal Feast</div>
+              <div class="text-[11px] text-slate-600 mt-0.5">EIDFEAST • 25% Off</div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: Festive Banners, Discounts & Theme Customizer -->
+      <div id="admin-pane-festive" class="hidden surface-card p-6 bg-white space-y-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900">Festive Campaign, Banner &amp; Light Theme Customizer</h2>
+          <p class="text-xs text-slate-600 mt-1">Customize seasonal announcements for Diwali, Holi, Christmas, Eid, or custom events. Changes immediately update the live storefront and sync to NeonDB (`site_settings`).</p>
+        </div>
+
+        <form onsubmit="saveCustomFestiveSettings(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="admin-festival-select" class="block text-xs font-bold text-slate-700">Upcoming Festival Theme Palette (Strictly Light)</label>
+            <select id="admin-festival-select" onchange="applyFestivalPresetInAdmin(this.value)" class="mt-1 w-full rounded-xl border border-slate-200 bg-amber-50/40 px-3.5 py-2.5 text-xs font-bold text-slate-800">
+              <option value="default">Sunlit Artisanal (Warm Terracotta &amp; Cream)</option>
+              <option value="diwali">Diwali — Festival of Lights (Marigold Gold &amp; Saffron Ivory)</option>
+              <option value="holi">Holi — Festival of Colors (Pastel Gulal Rose &amp; Mint Cream)</option>
+              <option value="christmas">Christmas — Winter Jubilee (Cranberry Red &amp; Pine Alabaster)</option>
+              <option value="eid">Eid — Royal Dastarkhwan Feast (Emerald &amp; Pearl Gold)</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-3 pt-5">
+            <input id="admin-banner-enabled" type="checkbox" checked class="w-4 h-4 rounded border-slate-300" />
+            <label for="admin-banner-enabled" class="text-xs font-bold text-slate-800">Display Top Festive Announcement Ribbon on Storefront</label>
+          </div>
+          <div class="md:col-span-2">
+            <label for="admin-banner-title" class="block text-xs font-bold text-slate-700">Festive Banner Headline *</label>
+            <input id="admin-banner-title" type="text" required class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-semibold text-slate-800" />
+          </div>
+          <div class="md:col-span-2">
+            <label for="admin-banner-subtitle" class="block text-xs font-bold text-slate-700">Festive Banner Supporting Details</label>
+            <input id="admin-banner-subtitle" type="text" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs text-slate-800" />
+          </div>
+          <div>
+            <label for="admin-promo-code" class="block text-xs font-bold text-slate-700">Active Promo Code</label>
+            <input id="admin-promo-code" type="text" required class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-bold text-slate-800 uppercase" />
+          </div>
+          <div>
+            <label for="admin-discount-rate" class="block text-xs font-bold text-slate-700">Site-Wide Discount Rate (%)</label>
+            <input id="admin-discount-rate" type="number" min="0" max="75" required class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-bold text-slate-800" />
+          </div>
+          <div>
+            <label for="admin-delivery-fee" class="block text-xs font-bold text-slate-700">Standard Delivery Fee (₹)</label>
+            <input id="admin-delivery-fee" type="number" min="0" max="250" required class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-bold text-slate-800" />
+          </div>
+          <div>
+            <label for="admin-free-threshold" class="block text-xs font-bold text-slate-700">Free Delivery Minimum Order (₹)</label>
+            <input id="admin-free-threshold" type="number" min="0" max="5000" required class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-bold text-slate-800" />
+          </div>
+          <div class="md:col-span-2 pt-2">
+            <button type="submit" class="px-6 py-3 rounded-xl text-xs sm:text-sm font-bold btn-brand">
+              Publish Festive Theme &amp; Discount Settings
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- TAB 3: Menu CRUD Manager -->
+      <div id="admin-pane-menu" class="hidden space-y-6">
+        <div class="surface-card p-6 bg-white">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-extrabold text-slate-900">Add or Update Pizza / Menu Item</h2>
+            <button type="button" onclick="resetAdminMenuForm()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700">Clear Form</button>
+          </div>
+          <form id="admin-menu-form" onsubmit="saveAdminMenuItem(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div>
+              <label for="admin-menu-name" class="block text-xs font-bold text-slate-700">Dish Title *</label>
+              <input id="admin-menu-name" type="text" required placeholder="e.g., Sicilian Sun-Dried Tomato Pie" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800" />
+            </div>
+            <div>
+              <label for="admin-menu-category" class="block text-xs font-bold text-slate-700">Category</label>
+              <select id="admin-menu-category" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800">
+                <option value="Signature Pizzas">Signature Pizzas</option>
+                <option value="Gourmet Specials">Gourmet Specials</option>
+                <option value="Crispy Melts &amp; Pastas">Crispy Melts &amp; Pastas</option>
+                <option value="Artisanal Sides">Artisanal Sides</option>
+                <option value="Desserts &amp; Drinks">Desserts &amp; Drinks</option>
+              </select>
+            </div>
+            <div>
+              <label for="admin-menu-price" class="block text-xs font-bold text-slate-700">Base Price (₹) *</label>
+              <input id="admin-menu-price" type="number" required value="529" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-800" />
+            </div>
+            <div>
+              <label for="admin-menu-calories" class="block text-xs font-bold text-slate-700">Calories (kcal)</label>
+              <input id="admin-menu-calories" type="number" value="760" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800" />
+            </div>
+            <div>
+              <label for="admin-menu-prep" class="block text-xs font-bold text-slate-700">Prep Window</label>
+              <input id="admin-menu-prep" type="text" value="16-20 mins" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800" />
+            </div>
+            <div>
+              <label for="admin-menu-image" class="block text-xs font-bold text-slate-700">HD Photography Asset</label>
+              <select id="admin-menu-image" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800">
+                <option value="hero_margherita">HD Wood-Fired Margherita</option>
+                <option value="truffle_burrata">HD Truffle &amp; Burrata Gold</option>
+                <option value="spicy_pepperoni_honey">HD Pepperoni &amp; Hot Honey</option>
+                <option value="mediterranean_veggie">HD Mediterranean Veggie Pan</option>
+                <option value="bbq_chicken_supreme">HD Smoked BBQ Chicken Stuffed Crust</option>
+                <option value="garlic_knots_lava_cake">HD Garlic Herb Knots &amp; Lava Cake</option>
+              </select>
+            </div>
+            <div class="sm:col-span-2 lg:col-span-3">
+              <label for="admin-menu-ingredients" class="block text-xs font-bold text-slate-700">Key Ingredients List</label>
+              <input id="admin-menu-ingredients" type="text" placeholder="San Marzano Tomatoes, Fior di Latte, Fresh Basil..." class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800" />
+            </div>
+            <div class="sm:col-span-2 lg:col-span-3">
+              <label for="admin-menu-desc" class="block text-xs font-bold text-slate-700">Culinary Description *</label>
+              <textarea id="admin-menu-desc" rows="2" required placeholder="Describe the crust, flavour profile, and toppings..." class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800"></textarea>
+            </div>
+            <div class="sm:col-span-2 lg:col-span-3 flex flex-wrap items-center justify-between gap-4 pt-2">
+              <div class="flex flex-wrap items-center gap-4 text-xs font-bold text-slate-700">
+                <label class="flex items-center gap-1.5"><input id="admin-menu-veg" type="checkbox" checked /> Pure Vegetarian</label>
+                <label class="flex items-center gap-1.5"><input id="admin-menu-spicy" type="checkbox" /> Spicy</label>
+                <label class="flex items-center gap-1.5"><input id="admin-menu-best" type="checkbox" /> Bestseller Badge</label>
+              </div>
+              <button type="submit" id="admin-menu-submit-btn" class="px-6 py-2.5 rounded-xl text-xs font-bold btn-brand">
+                + Save Dish to Menu
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="surface-card overflow-x-auto bg-white">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-200 bg-amber-50/50 text-[11px] font-extrabold uppercase text-slate-600">
+                <th class="py-3 px-4">Dish &amp; Category</th>
+                <th class="py-3 px-4">Price</th>
+                <th class="py-3 px-4">Dietary &amp; Tags</th>
+                <th class="py-3 px-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-menu-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 4: Live Customer Orders Manager -->
+      <div id="admin-pane-orders" class="hidden space-y-4">
+        <div class="surface-card p-5 bg-white">
+          <h2 class="text-lg font-extrabold text-slate-900">Customer Orders Queue &amp; Live Stage Dispatch</h2>
+          <p class="text-xs text-slate-600 mt-1">Updating an order stage here immediately updates the customer's Live 5-Stage Oven Tracker and persists to NeonDB (`orders` table).</p>
+        </div>
+        <div id="admin-orders-list" class="space-y-3"></div>
+      </div>
+
+      <!-- TAB 5: Blog Posts Manager -->
+      <div id="admin-pane-blogs" class="hidden space-y-6">
+        <div class="surface-card p-6 bg-white">
+          <h2 class="text-lg font-extrabold text-slate-900">Publish or Update Journal Article</h2>
+          <form id="admin-blog-form" onsubmit="saveAdminBlogPost(event)" class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="admin-blog-title" class="block text-xs font-bold text-slate-700">Article Headline *</label>
+              <input id="admin-blog-title" type="text" required placeholder="e.g., The Art of Wood-Fired Neapolitan Crust" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800" />
+            </div>
+            <div>
+              <label for="admin-blog-category" class="block text-xs font-bold text-slate-700">Category</label>
+              <input id="admin-blog-category" type="text" value="Culinary Craft" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800" />
+            </div>
+            <div>
+              <label for="admin-blog-author" class="block text-xs font-bold text-slate-700">Author Name</label>
+              <input id="admin-blog-author" type="text" value="Chef Marco Bellini" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800" />
+            </div>
+            <div>
+              <label for="admin-blog-image" class="block text-xs font-bold text-slate-700">Featured HD Photography</label>
+              <select id="admin-blog-image" class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800">
+                <option value="hero_margherita">HD Wood-Fired Margherita</option>
+                <option value="truffle_burrata">HD Truffle &amp; Burrata Gold</option>
+                <option value="spicy_pepperoni_honey">HD Pepperoni &amp; Hot Honey</option>
+                <option value="mediterranean_veggie">HD Mediterranean Veggie Pan</option>
+                <option value="bbq_chicken_supreme">HD Smoked BBQ Chicken Stuffed Crust</option>
+                <option value="garlic_knots_lava_cake">HD Garlic Herb Knots &amp; Lava Cake</option>
+              </select>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="admin-blog-excerpt" class="block text-xs font-bold text-slate-700">Short Summary Excerpt</label>
+              <input id="admin-blog-excerpt" type="text" placeholder="One-sentence teaser displayed on the blog card..." class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800" />
+            </div>
+            <div class="sm:col-span-2">
+              <label for="admin-blog-content" class="block text-xs font-bold text-slate-700">Full Article Story *</label>
+              <textarea id="admin-blog-content" rows="4" required placeholder="Write the full culinary story..." class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800"></textarea>
+            </div>
+            <div class="sm:col-span-2">
+              <button type="submit" class="px-6 py-2.5 rounded-xl text-xs font-bold btn-brand">
+                Save &amp; Publish Journal Article
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div id="admin-blogs-list" class="space-y-3"></div>
+      </div>
+
+      <!-- TAB 6: Testimonials & Customer Contacts CRM -->
+      <div id="admin-pane-crm" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="surface-card p-5 bg-white space-y-3">
+          <h3 class="text-base font-extrabold text-slate-900">Verified Guest Testimonials (${state.testimonials.length})</h3>
+          <p class="text-xs text-slate-500">Moderate or remove guest reviews displayed on the storefront.</p>
+          <div id="admin-testimonials-list" class="space-y-2.5"></div>
+        </div>
+        <div class="surface-card p-5 bg-white space-y-3">
+          <h3 class="text-base font-extrabold text-slate-900">Customer Contact &amp; Catering Inquiries (${state.contacts.length})</h3>
+          <p class="text-xs text-slate-500">Manage event catering bookings, table reservations, and customer messages.</p>
+          <div id="admin-contacts-list" class="space-y-2.5"></div>
+        </div>
+      </div>
+
+      <!-- TAB 7: EXTENSIVE ADMIN-ONLY DOCUMENTATION & DEVELOPER CORS API HUB -->
+      <div id="admin-pane-docs" class="hidden space-y-6">
+        <div class="surface-card p-6 sm:p-8 bg-white space-y-6">
+          <div class="border-b border-slate-200 pb-4">
+            <span class="px-3 py-1 rounded-full text-xs font-extrabold badge-brand uppercase">Restricted Admin-Only Handbook</span>
+            <h2 class="text-2xl font-extrabold text-slate-900 mt-2">Elysium Pizza — Extensive Administrator &amp; Developer API Documentation</h2>
+            <p class="text-sm text-slate-600 mt-1">
+              This documentation is strictly invisible to customers and only accessible within an authenticated Admin session. It covers Netlify deployment, NeonDB PostgreSQL setup, environment variables, and CORS-enabled REST APIs for external developers.
+            </p>
+          </div>
+
+          <!-- Section A: Environment Variables & NeonDB Connection -->
+          <div class="space-y-3">
+            <h3 class="text-lg font-extrabold text-slate-900">1. Netlify Environment Variables &amp; NeonDB Setup</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              In your <strong>Netlify Dashboard → Site Configuration → Environment Variables</strong>, configure the following three variables. The serverless function (<code>netlify/functions/api.js</code>) reads these variables automatically at runtime and auto-creates all required PostgreSQL tables on first invocation:
+            </p>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border border-slate-200 rounded-xl text-xs">
+                <thead class="bg-amber-50/70 text-slate-700 font-bold border-b border-slate-200">
+                  <tr>
+                    <th class="p-3">Environment Variable</th>
+                    <th class="p-3">Purpose</th>
+                    <th class="p-3">Example Value</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-rose-700">DATABASE_URL</td>
+                    <td class="p-3 text-slate-600">NeonDB Serverless PostgreSQL connection URI with SSL enabled</td>
+                    <td class="p-3 font-mono text-slate-700">postgresql://user:pass@ep-xyz.us-east-2.aws.neon.tech/elysium?sslmode=require</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-rose-700">ADMIN_USERNAME</td>
+                    <td class="p-3 text-slate-600">Administrator login username &amp; write-API header credential</td>
+                    <td class="p-3 font-mono text-slate-700">elysium_admin</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-rose-700">ADMIN_PASSWORD</td>
+                    <td class="p-3 text-slate-600">Administrator login password &amp; write-API header credential</td>
+                    <td class="p-3 font-mono text-slate-700">Elysium@2026</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section B: Exposed CORS Headers & Developer REST API Reference -->
+          <div class="space-y-3 pt-2">
+            <h3 class="text-lg font-extrabold text-slate-900">2. Public &amp; Protected CORS-Enabled REST API Endpoints</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              All endpoints under <code>/api/*</code> (routed via <code>netlify.toml</code> to <code>/.netlify/functions/api/:splat</code>) include permissive CORS headers so external developers, mobile apps, and partner aggregators can consume live menu, blog, order, and festive data from any origin:
+            </p>
+            <pre class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-800 overflow-x-auto">Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+Access-Control-Allow-Headers: Content-Type, Authorization, X-Admin-Username, X-Admin-Password
+Content-Type: application/json; charset=utf-8</pre>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border border-slate-200 rounded-xl text-xs">
+                <thead class="bg-amber-50/70 text-slate-700 font-bold border-b border-slate-200">
+                  <tr>
+                    <th class="p-3">HTTP Method &amp; Endpoint</th>
+                    <th class="p-3">Access Level</th>
+                    <th class="p-3">Description &amp; Payload</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-emerald-700">GET /api/menu</td>
+                    <td class="p-3">Public (CORS *)</td>
+                    <td class="p-3 text-slate-600">Returns all pizza, melt, pasta, side &amp; dessert items from NeonDB (`menu_items`).</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-blue-700">POST /api/menu</td>
+                    <td class="p-3">Admin Auth</td>
+                    <td class="p-3 text-slate-600">Creates or upserts a dish (`name`, `category`, `price`, `calories`, `is_veg`, `description`).</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-amber-700">PUT /api/menu/:id</td>
+                    <td class="p-3">Admin Auth</td>
+                    <td class="p-3 text-slate-600">Updates an existing pizza/food item by ID.</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-rose-700">DELETE /api/menu/:id</td>
+                    <td class="p-3">Admin Auth</td>
+                    <td class="p-3 text-slate-600">Permanently removes a dish from the NeonDB catalog.</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-emerald-700">GET / POST /api/orders</td>
+                    <td class="p-3">Public / Admin</td>
+                    <td class="p-3 text-slate-600">Places a new customer order (`POST`) or retrieves orders (`GET`). `PUT /api/orders/:id` updates live oven status.</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-emerald-700">GET / POST / PUT / DELETE /api/blogs</td>
+                    <td class="p-3">Public GET / Admin Write</td>
+                    <td class="p-3 text-slate-600">Full CRUD for *The Elysium Journal* blog posts.</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-emerald-700">GET / POST / DELETE /api/testimonials</td>
+                    <td class="p-3">Public GET &amp; POST / Admin Delete</td>
+                    <td class="p-3 text-slate-600">Fetch verified guest reviews, submit new diner reviews, or moderate reviews.</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-emerald-700">GET / POST / PUT / DELETE /api/contacts</td>
+                    <td class="p-3">Public POST / Admin Read &amp; Write</td>
+                    <td class="p-3 text-slate-600">Submit customer catering/contact inquiries (`POST`) or manage status in Admin CRM.</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-emerald-700">GET / PUT /api/settings</td>
+                    <td class="p-3">Public GET / Admin PUT</td>
+                    <td class="p-3 text-slate-600">Reads or updates active festive theme (`diwali`, `holi`, `christmas`, `eid`), banner copy &amp; discount rate.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section C: Sample External Developer Code & Interactive API Tester -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
+            <div class="space-y-2">
+              <h4 class="text-sm font-extrabold text-slate-900">3. Sample External Developer Fetch Snippet (CORS Enabled)</h4>
+              <pre class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-800 overflow-x-auto">// Any external developer can query the public menu API:
+const res = await fetch("https://your-site.netlify.app/api/menu");
+const { data, count } = await res.json();
+
+// Authenticated Admin Write Request (POST / PUT / DELETE):
+await fetch("https://your-site.netlify.app/api/menu", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "X-Admin-Username": "elysium_admin",
+    "X-Admin-Password": "YOUR_ADMIN_PASSWORD"
+  },
+  body: JSON.stringify({
+    name: "Diwali Saffron Pistachio Burrata Pie",
+    category: "Gourmet Specials",
+    price: 679,
+    is_veg: true,
+    description: "Limited festive creation."
+  })
+});</pre>
+            </div>
+
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <h4 class="text-sm font-extrabold text-slate-900">4. Interactive Live API Endpoint Inspector</h4>
+                <div class="flex flex-wrap gap-1.5">
+                  <button type="button" onclick="runAdminApiSimulator('GET', '/api/menu')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">Test GET /api/menu</button>
+                  <button type="button" onclick="runAdminApiSimulator('GET', '/api/orders')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200">Test GET /api/orders</button>
+                  <button type="button" onclick="runAdminApiSimulator('GET', '/api/settings')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-50 text-rose-800 border border-rose-200">Test GET /api/settings</button>
+                </div>
+              </div>
+              <pre id="admin-api-simulator-output" class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-800 h-56 overflow-y-auto">// Click any button above to inspect the live CORS headers and JSON payload...</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       MODALS: CART & CHECKOUT DRAWER, BLOG READER, ADMIN LOGIN
+       (All Strictly Light-Themed with Frosted Glass Backdrops)
+       ======================================================================== -->
+
+  <!-- 1. Cart & Multi-Step Checkout Modal -->
+  <div id="cart-drawer-modal" class="hidden fixed inset-0 z-50 light-modal-backdrop flex justify-end">
+    <div class="w-full max-w-lg bg-white h-full shadow-2xl border-l border-amber-200 flex flex-col justify-between overflow-y-auto p-6">
+      <div class="space-y-5">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase text-brand">Hot-Box Express</span>
+            <h3 class="text-xl font-extrabold text-slate-900">Your Wood-Fired Order Basket</h3>
+          </div>
+          <button type="button" onclick="toggleCartDrawer(false)" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200">
+            ✕ Close
+          </button>
+        </div>
+
+        <div id="cart-items-container" class="space-y-3"></div>
+        <div id="cart-totals-summary"></div>
+
+        <!-- Customer Delivery & Payment Form -->
+        <form id="checkout-order-form" onsubmit="submitCustomerOrder(event)" class="space-y-3 pt-4 border-t border-slate-200">
+          <h4 class="text-sm font-extrabold text-slate-900">Delivery &amp; Instant Checkout Details</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label for="checkout-name" class="block text-xs font-bold text-slate-700">Your Name *</label>
+              <input id="checkout-name" type="text" required value="Arundhati Mukherjee" class="mt-1 w-full rounded-xl border border-slate-200 bg-amber-50/30 px-3 py-2 text-xs text-slate-800" />
+            </div>
+            <div>
+              <label for="checkout-phone" class="block text-xs font-bold text-slate-700">Mobile Number *</label>
+              <input id="checkout-phone" type="tel" required value="+91 98301 44210" class="mt-1 w-full rounded-xl border border-slate-200 bg-amber-50/30 px-3 py-2 text-xs text-slate-800" />
+            </div>
+          </div>
+          <div>
+            <label for="checkout-email" class="block text-xs font-bold text-slate-700">Email for Order Receipt</label>
+            <input id="checkout-email" type="email" value="arundhati.m@example.com" class="mt-1 w-full rounded-xl border border-slate-200 bg-amber-50/30 px-3 py-2 text-xs text-slate-800" />
+          </div>
+          <div>
+            <label for="checkout-address" class="block text-xs font-bold text-slate-700">Delivery Address / Table Note *</label>
+            <input id="checkout-address" type="text" required value="42B Lovelock Place, Ballygunge, Kolkata 700019" class="mt-1 w-full rounded-xl border border-slate-200 bg-amber-50/30 px-3 py-2 text-xs text-slate-800" />
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label for="checkout-payment" class="block text-xs font-bold text-slate-700">Payment Method</label>
+              <select id="checkout-payment" class="mt-1 w-full rounded-xl border border-slate-200 bg-amber-50/30 px-3 py-2 text-xs font-bold text-slate-800">
+                <option value="UPI / Instant Pay">UPI / Instant Pay (GPay, PhonePe)</option>
+                <option value="Credit / Debit Card">Credit or Debit Card</option>
+                <option value="Pay on Delivery">Cash / Card on Delivery</option>
+              </select>
+            </div>
+            <div>
+              <label for="checkout-notes" class="block text-xs font-bold text-slate-700">Kitchen Instructions</label>
+              <input id="checkout-notes" type="text" placeholder="Extra oregano, chili flakes..." class="mt-1 w-full rounded-xl border border-slate-200 bg-amber-50/30 px-3 py-2 text-xs text-slate-800" />
+            </div>
+          </div>
+          <button type="submit" class="w-full py-3.5 rounded-xl text-sm font-extrabold btn-brand shadow-md mt-2">
+            🔥 Place Order &amp; Launch Live Oven Tracker
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Blog Story Reader Modal -->
+  <div id="blog-reader-modal" class="hidden fixed inset-0 z-50 light-modal-backdrop flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl bg-white rounded-3xl border border-amber-200 shadow-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-end mb-2">
+        <button type="button" onclick="closeBlogReaderModal()" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200">
+          ✕ Close Article
+        </button>
+      </div>
+      <div id="blog-reader-content"></div>
+    </div>
+  </div>
+
+  <!-- 3. Manager / Admin Portal Login Modal -->
+  <div id="admin-login-modal" class="hidden fixed inset-0 z-50 light-modal-backdrop flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-white rounded-3xl border border-amber-200 shadow-2xl p-6 sm:p-8 space-y-5">
+      <div class="flex items-start justify-between">
+        <div>
+          <span class="px-2.5 py-1 rounded-full text-[11px] font-extrabold badge-brand uppercase">Authorized Staff Only</span>
+          <h3 class="text-xl font-extrabold text-slate-900 mt-1.5">Elysium Manager Sign In</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Sign in with your administrator credentials to manage menu items, festive themes, orders, and view the Admin Documentation.</p>
+        </div>
+        <button type="button" onclick="closeAdminLoginModal()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-bold">✕</button>
+      </div>
+
+      <form onsubmit="handleAdminLoginSubmit(event)" class="space-y-3.5">
+        <div>
+          <label for="admin-username-input" class="block text-xs font-bold text-slate-700">Manager Username</label>
+          <input id="admin-username-input" type="text" required placeholder="Enter ADMIN_USERNAME" class="mt-1 w-full rounded-xl border border-slate-200 bg-amber-50/40 px-3.5 py-2.5 text-xs font-semibold text-slate-800" />
+        </div>
+        <div>
+          <label for="admin-password-input" class="block text-xs font-bold text-slate-700">Manager Password</label>
+          <input id="admin-password-input" type="password" required placeholder="Enter ADMIN_PASSWORD" class="mt-1 w-full rounded-xl border border-slate-200 bg-amber-50/40 px-3.5 py-2.5 text-xs font-semibold text-slate-800" />
+        </div>
+        <div class="flex flex-col gap-2 pt-1">
+          <button type="submit" class="w-full py-3 rounded-xl text-xs sm:text-sm font-extrabold btn-brand">
+            Sign In to Management Suite →
+          </button>
+          <button type="button" onclick="fillDemoAdminCredentials()" class="w-full py-2.5 rounded-xl text-xs font-bold bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100">
+            ⚡ Fill Demo Manager Credentials (Instant Preview)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Sunlit Light Footer (Zero Tech Details on Customer UI) -->
+  <footer class="bg-white border-t border-amber-200/80 py-10 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <div class="flex items-center gap-2.5">
+        <span class="font-extrabold text-slate-900 text-sm">Elysium <span class="text-brand">Pizza</span></span>
+        <span>•</span>
+        <span>Handcrafted 72-Hour Sourdough Pizzeria &amp; Hospitality Kitchens</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-4">
+        <button type="button" onclick="navigateToSection('menu-section')" class="hover:text-rose-700 font-medium">Menu</button>
+        <button type="button" onclick="navigateToSection('studio-section')" class="hover:text-rose-700 font-medium">Custom Studio</button>
+        <button type="button" onclick="navigateToSection('blog-section')" class="hover:text-rose-700 font-medium">Journal</button>
+        <button type="button" onclick="navigateToSection('contact-section')" class="hover:text-rose-700 font-medium">Catering</button>
+        <button type="button" onclick="openAdminPortalModal()" class="text-amber-800 font-semibold hover:underline">Manager Sign In</button>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

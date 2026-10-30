@@ -1,0 +1,19 @@
+{
+  "name": "elysium-pizza-netlify",
+  "version": "2.4.0",
+  "description": "Elysium Pizza — Artisanal Wood-Fired Pizzeria & Ordering Platform powered by Netlify & NeonDB",
+  "private": true,
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'Static bundle ready for Netlify deployment'"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.38.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
