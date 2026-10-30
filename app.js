@@ -4,7 +4,7 @@
    Admin Portal: Protected Management + Festive Engine + Admin-Only API Docs
    ========================================================================== */
 
-const IMAGE_MAP = {
+const ep_IMAGE_MAP = {
   hero_margherita: "assets/hero_margherita.jpg",
   truffle_burrata: "assets/truffle_burrata.jpg",
   spicy_pepperoni_honey: "assets/spicy_pepperoni_honey.jpg",
@@ -13,7 +13,7 @@ const IMAGE_MAP = {
   garlic_knots_lava_cake: "assets/garlic_knots_lava_cake.jpg"
 };
 
-const FESTIVAL_PRESETS = {
+const ep_FESTIVAL_PRESETS = {
   default: {
     active_festival: "default",
     label: "Sunlit Artisanal (Default)",
@@ -76,7 +76,7 @@ const FESTIVAL_PRESETS = {
   }
 };
 
-const INITIAL_MENU = [
+const ep_INITIAL_MENU = [
   {
     id: "pizza-margherita-regina",
     name: "San Marzano Margherita Regina",
@@ -249,7 +249,7 @@ const INITIAL_MENU = [
   }
 ];
 
-const SIGNATURE_COMBOS = [
+const ep_SIGNATURE_COMBOS = [
   {
     id: "combo-triple-treat-box",
     name: "The Elysium Triple Treat Box",
@@ -285,7 +285,7 @@ const SIGNATURE_COMBOS = [
   }
 ];
 
-const INITIAL_BLOGS = [
+const ep_INITIAL_BLOGS = [
   {
     id: "blog-72-hour-fermentation",
     title: "Why We Cold-Ferment Our Sourdough for 72 Full Hours",
@@ -327,7 +327,7 @@ const INITIAL_BLOGS = [
   }
 ];
 
-const INITIAL_TESTIMONIALS = [
+const ep_INITIAL_TESTIMONIALS = [
   {
     id: "rev-101",
     guest_name: "Arundhati Mukherjee",
@@ -366,7 +366,7 @@ const INITIAL_TESTIMONIALS = [
   }
 ];
 
-const INITIAL_ORDERS = [
+const ep_INITIAL_ORDERS = [
   {
     id: "ELY-849201",
     customer_name: "Arundhati Mukherjee",
@@ -412,7 +412,7 @@ const INITIAL_ORDERS = [
   }
 ];
 
-const INITIAL_CONTACTS = [
+const ep_INITIAL_CONTACTS = [
   {
     id: "inq-301",
     full_name: "Priyanka Chatterjee",
@@ -437,7 +437,7 @@ const INITIAL_CONTACTS = [
   }
 ];
 
-const ORDER_STAGES = [
+const ep_ORDER_STAGES = [
   "Order Confirmed",
   "Hand-Stretching 72h Dough",
   "Baking in Wood-Fired Oven",
@@ -463,18 +463,18 @@ function saveStorage(key, value) {
 }
 
 // Application Reactive State
-const state = {
-  settings: loadStorage("ely_settings_v2", { ...FESTIVAL_PRESETS.default }),
-  menu: loadStorage("ely_menu_v2", INITIAL_MENU),
-  blogs: loadStorage("ely_blogs_v2", INITIAL_BLOGS),
-  testimonials: loadStorage("ely_testimonials_v2", INITIAL_TESTIMONIALS),
-  orders: loadStorage("ely_orders_v2", INITIAL_ORDERS),
-  contacts: loadStorage("ely_contacts_v2", INITIAL_CONTACTS),
-  subscribers: loadStorage("ely_subscribers_v2", [
+const ep_state = {
+  settings: loadStorage("ep_settings_v3", { ...ep_FESTIVAL_PRESETS.default }),
+  menu: loadStorage("ep_menu_v3", ep_INITIAL_MENU),
+  blogs: loadStorage("ep_blogs_v3", ep_INITIAL_BLOGS),
+  testimonials: loadStorage("ep_testimonials_v3", ep_INITIAL_TESTIMONIALS),
+  orders: loadStorage("ep_orders_v3", ep_INITIAL_ORDERS),
+  contacts: loadStorage("ep_contacts_v3", ep_INITIAL_CONTACTS),
+  subscribers: loadStorage("ep_subscribers_v3", [
     { email: "arundhati.m@example.com", subscribed_at: "Oct 25, 2026" },
     { email: "vikram.roy@example.com", subscribed_at: "Oct 28, 2026" }
   ]),
-  cart: loadStorage("ely_cart_v2", [
+  cart: loadStorage("ep_cart_v3", [
     {
       cartId: "cart-init-1",
       id: "pizza-truffle-burrata",
@@ -510,7 +510,7 @@ const state = {
   editingTestimonialId: null
 };
 
-const TOPPING_CATALOG = [
+const ep_TOPPING_CATALOG = [
   { name: "Fresh Torn Burrata", price: 89, cal: 95, veg: true },
   { name: "Roasted Wild Mushrooms", price: 69, cal: 35, veg: true },
   { name: "Smoked Cup Pepperoni", price: 99, cal: 120, veg: false },
@@ -524,12 +524,12 @@ const TOPPING_CATALOG = [
 ];
 
 function resolveImage(keyOrUrl) {
-  if (!keyOrUrl) return IMAGE_MAP.hero_margherita;
-  if (IMAGE_MAP[keyOrUrl]) return IMAGE_MAP[keyOrUrl];
+  if (!keyOrUrl) return ep_IMAGE_MAP.hero_margherita;
+  if (ep_IMAGE_MAP[keyOrUrl]) return ep_IMAGE_MAP[keyOrUrl];
   if (keyOrUrl.startsWith("http") || keyOrUrl.startsWith("data:") || keyOrUrl.startsWith("assets/") ) {
     return keyOrUrl;
   }
-  return IMAGE_MAP.hero_margherita;
+  return ep_IMAGE_MAP.hero_margherita;
 }
 
 // Toast Notification Helper (Never uses alert!)
@@ -557,7 +557,7 @@ window.showToast = function(title, subtitle = "", tone = "brand") {
 
 // Apply Festive Theme & Banner to Document
 function applyFestiveThemeToDOM() {
-  const s = state.settings;
+  const s = ep_state.settings;
   document.body.setAttribute("data-festival", s.active_festival || "default");
 
   const ribbon = document.getElementById("festive-ribbon-bar");
@@ -574,7 +574,7 @@ function applyFestiveThemeToDOM() {
   if (subEl) subEl.textContent = s.banner_subtitle;
   if (codePill) codePill.textContent = `${s.promo_code} • ${s.discount_percent}% OFF`;
 
-  const presetInfo = FESTIVAL_PRESETS[s.active_festival] || FESTIVAL_PRESETS.default;
+  const presetInfo = ep_FESTIVAL_PRESETS[s.active_festival] || ep_FESTIVAL_PRESETS.default;
   if (heroSeasonTag) {
     heroSeasonTag.textContent = presetInfo.season_tag;
   }
@@ -608,7 +608,7 @@ window.toggleMobileNav = function() {
 
 // Order Mode (Delivery / Carryout / Dine-In)
 window.setOrderMode = function(mode) {
-  state.orderMode = mode;
+  ep_state.orderMode = mode;
   ["Delivery", "Carryout", "Dine-In"].forEach((m) => {
     const btn = document.getElementById(`mode-btn-${m}`);
     if (btn) {
@@ -621,24 +621,24 @@ window.setOrderMode = function(mode) {
   });
   const outletLabel = document.getElementById("active-mode-summary");
   if (outletLabel) {
-    outletLabel.textContent = `${mode} • ${state.selectedOutlet}`;
+    outletLabel.textContent = `${mode} • ${ep_state.selectedOutlet}`;
   }
   renderCartDrawer();
-  showToast(`${mode} Mode Selected`, `Serving from ${state.selectedOutlet}`);
+  showToast(`${mode} Mode Selected`, `Serving from ${ep_state.selectedOutlet}`);
 };
 
 window.changeKitchenOutlet = function(outletName) {
-  state.selectedOutlet = outletName;
+  ep_state.selectedOutlet = outletName;
   const outletLabel = document.getElementById("active-mode-summary");
   if (outletLabel) {
-    outletLabel.textContent = `${state.orderMode} • ${state.selectedOutlet}`;
+    outletLabel.textContent = `${ep_state.orderMode} • ${ep_state.selectedOutlet}`;
   }
   showToast("Kitchen Updated", `Switched to ${outletName}`);
 };
 
 // Copy Promo Code Helper
 window.copyActivePromoCode = function() {
-  const code = state.settings.promo_code || "ELYSIUM15";
+  const code = ep_state.settings.promo_code || "ELYSIUM15";
   try {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(code);
@@ -651,14 +651,14 @@ window.copyActivePromoCode = function() {
       temp.remove();
     }
   } catch (_) {}
-  showToast(`Promo Code ${code} Copied!`, `Automatically gives ${state.settings.discount_percent}% off in your cart.`, "emerald");
+  showToast(`Promo Code ${code} Copied!`, `Automatically gives ${ep_state.settings.discount_percent}% off in your cart.`, "emerald");
 };
 
 // Render Signature Combos (Pizza Hut Box Deals Elevated)
 function renderComboDeals() {
   const grid = document.getElementById("combo-deals-grid");
   if (!grid) return;
-  grid.innerHTML = SIGNATURE_COMBOS.map((combo) => {
+  grid.innerHTML = ep_SIGNATURE_COMBOS.map((combo) => {
     const savings = combo.original_price - combo.price;
     return `
       <div class="surface-card overflow-hidden flex flex-col justify-between">
@@ -697,7 +697,7 @@ function renderComboDeals() {
 }
 
 window.addComboToCart = function(comboId) {
-  const combo = SIGNATURE_COMBOS.find((c) => c.id === comboId);
+  const combo = ep_SIGNATURE_COMBOS.find((c) => c.id === comboId);
   if (!combo) return;
   addItemToCartObject({
     id: combo.id,
@@ -714,7 +714,7 @@ function renderMenuSection() {
   const catContainer = document.getElementById("menu-category-pills");
   if (catContainer) {
     catContainer.innerHTML = categories.map((cat) => {
-      const active = state.activeCategory === cat;
+      const active = ep_state.activeCategory === cat;
       return `
         <button onclick="setMenuCategory('${cat}')" class="px-4 py-2 rounded-full text-sm transition-all ${
           active
@@ -727,21 +727,21 @@ function renderMenuSection() {
     }).join("");
   }
 
-  let filtered = state.menu.filter((item) => item.available !== false);
-  if (state.activeCategory !== "All Items") {
-    filtered = filtered.filter((item) => item.category === state.activeCategory);
+  let filtered = ep_state.menu.filter((item) => item.available !== false);
+  if (ep_state.activeCategory !== "All Items") {
+    filtered = filtered.filter((item) => item.category === ep_state.activeCategory);
   }
-  if (state.vegOnly) {
+  if (ep_state.vegOnly) {
     filtered = filtered.filter((item) => item.is_veg);
   }
-  if (state.spicyOnly) {
+  if (ep_state.spicyOnly) {
     filtered = filtered.filter((item) => item.is_spicy);
   }
-  if (state.bestsellerOnly) {
+  if (ep_state.bestsellerOnly) {
     filtered = filtered.filter((item) => item.is_bestseller);
   }
-  if (state.searchQuery.trim()) {
-    const q = state.searchQuery.toLowerCase();
+  if (ep_state.searchQuery.trim()) {
+    const q = ep_state.searchQuery.toLowerCase();
     filtered = filtered.filter(
       (item) =>
         item.name.toLowerCase().includes(q) ||
@@ -750,11 +750,11 @@ function renderMenuSection() {
     );
   }
 
-  if (state.sortBy === "price-asc") {
+  if (ep_state.sortBy === "price-asc") {
     filtered.sort((a, b) => a.price - b.price);
-  } else if (state.sortBy === "price-desc") {
+  } else if (ep_state.sortBy === "price-desc") {
     filtered.sort((a, b) => b.price - a.price);
-  } else if (state.sortBy === "rating") {
+  } else if (ep_state.sortBy === "rating") {
     filtered.sort((a, b) => Number(b.rating) - Number(a.rating));
   }
 
@@ -779,7 +779,7 @@ function renderMenuSection() {
 
   grid.innerHTML = filtered.map((item) => {
     const isPizza = item.category.includes("Pizza") || item.category.includes("Gourmet");
-    const sel = state.cardSelections[item.id] || { size: "Medium 12\"", crust: "Hand-Tossed 72h", extraPrice: 0 };
+    const sel = ep_state.cardSelections[item.id] || { size: "Medium 12\"", crust: "Hand-Tossed 72h", extraPrice: 0 };
     const finalPrice = Number(item.price) + Number(sel.extraPrice || 0);
 
     return `
@@ -862,7 +862,7 @@ function renderMenuSection() {
 }
 
 window.updateCardOption = function(itemId, field, value) {
-  const current = state.cardSelections[itemId] || { size: "Medium 12 inch", crust: "Hand-Tossed 72h", extraPrice: 0 };
+  const current = ep_state.cardSelections[itemId] || { size: "Medium 12 inch", crust: "Hand-Tossed 72h", extraPrice: 0 };
   current[field] = value;
   let delta = 0;
   if (current.size === "Personal 8 inch") delta -= 90;
@@ -870,41 +870,41 @@ window.updateCardOption = function(itemId, field, value) {
   if (current.crust === "Golden Pan Crust") delta += 40;
   if (current.crust === "Cheese Stuffed Crust") delta += 110;
   current.extraPrice = delta;
-  state.cardSelections[itemId] = current;
+  ep_state.cardSelections[itemId] = current;
   renderMenuSection();
 };
 
 window.setMenuCategory = function(cat) {
-  state.activeCategory = cat;
+  ep_state.activeCategory = cat;
   renderMenuSection();
 };
 
 window.handleMenuSearch = function(val) {
-  state.searchQuery = val;
+  ep_state.searchQuery = val;
   renderMenuSection();
 };
 
 window.toggleDietaryFilter = function(filterName) {
-  if (filterName === "veg") state.vegOnly = !state.vegOnly;
-  if (filterName === "spicy") state.spicyOnly = !state.spicyOnly;
-  if (filterName === "bestseller") state.bestsellerOnly = !state.bestsellerOnly;
+  if (filterName === "veg") ep_state.vegOnly = !ep_state.vegOnly;
+  if (filterName === "spicy") ep_state.spicyOnly = !ep_state.spicyOnly;
+  if (filterName === "bestseller") ep_state.bestsellerOnly = !ep_state.bestsellerOnly;
 
   const vegBtn = document.getElementById("filter-btn-veg");
   const spicyBtn = document.getElementById("filter-btn-spicy");
   const bestBtn = document.getElementById("filter-btn-bestseller");
 
   if (vegBtn) {
-    vegBtn.className = state.vegOnly
+    vegBtn.className = ep_state.vegOnly
       ? "px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300"
       : "px-3.5 py-2 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200";
   }
   if (spicyBtn) {
-    spicyBtn.className = state.spicyOnly
+    spicyBtn.className = ep_state.spicyOnly
       ? "px-3.5 py-2 rounded-xl text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300"
       : "px-3.5 py-2 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200";
   }
   if (bestBtn) {
-    bestBtn.className = state.bestsellerOnly
+    bestBtn.className = ep_state.bestsellerOnly
       ? "px-3.5 py-2 rounded-xl text-xs font-bold badge-brand border border-rose-300"
       : "px-3.5 py-2 rounded-xl text-xs font-semibold bg-white text-slate-700 border border-slate-200";
   }
@@ -912,17 +912,17 @@ window.toggleDietaryFilter = function(filterName) {
 };
 
 window.handleMenuSort = function(val) {
-  state.sortBy = val;
+  ep_state.sortBy = val;
   renderMenuSection();
 };
 
 window.resetMenuFilters = function() {
-  state.activeCategory = "All Items";
-  state.searchQuery = "";
-  state.vegOnly = false;
-  state.spicyOnly = false;
-  state.bestsellerOnly = false;
-  state.sortBy = "featured";
+  ep_state.activeCategory = "All Items";
+  ep_state.searchQuery = "";
+  ep_state.vegOnly = false;
+  ep_state.spicyOnly = false;
+  ep_state.bestsellerOnly = false;
+  ep_state.sortBy = "featured";
   const searchInput = document.getElementById("menu-search-input");
   if (searchInput) searchInput.value = "";
   toggleDietaryFilter("");
@@ -930,10 +930,10 @@ window.resetMenuFilters = function() {
 };
 
 window.addMenuItemToCart = function(itemId) {
-  const item = state.menu.find((m) => m.id === itemId);
+  const item = ep_state.menu.find((m) => m.id === itemId);
   if (!item) return;
   const isPizza = item.category.includes("Pizza") || item.category.includes("Gourmet");
-  const sel = state.cardSelections[item.id] || { size: "Medium 12\"", crust: "Hand-Tossed 72h", extraPrice: 0 };
+  const sel = ep_state.cardSelections[item.id] || { size: "Medium 12\"", crust: "Hand-Tossed 72h", extraPrice: 0 };
   const finalPrice = Number(item.price) + Number(sel.extraPrice || 0);
   const meta = isPizza ? `${sel.size} • ${sel.crust}` : item.category;
 
@@ -948,8 +948,8 @@ window.addMenuItemToCart = function(itemId) {
 
 // Custom Pizza Studio (Interactive 4-Step Builder)
 function renderCustomPizzaStudio() {
-  const c = state.customPizza;
-  const toppingObjects = TOPPING_CATALOG.filter((t) => c.toppings.includes(t.name));
+  const c = ep_state.customPizza;
+  const toppingObjects = ep_TOPPING_CATALOG.filter((t) => c.toppings.includes(t.name));
   const toppingsPrice = toppingObjects.reduce((acc, t) => acc + t.price, 0);
   const toppingsCal = toppingObjects.reduce((acc, t) => acc + t.cal, 0);
 
@@ -974,7 +974,7 @@ function renderCustomPizzaStudio() {
   }
 
   if (toppingsGrid) {
-    toppingsGrid.innerHTML = TOPPING_CATALOG.map((top) => {
+    toppingsGrid.innerHTML = ep_TOPPING_CATALOG.map((top) => {
       const active = c.toppings.includes(top.name);
       return `
         <button type="button" onclick="toggleStudioTopping('${top.name}')" class="p-3 rounded-xl border text-left transition-all flex items-center justify-between ${
@@ -999,12 +999,12 @@ function renderCustomPizzaStudio() {
 }
 
 window.setStudioOption = function(type, name, price, cal) {
-  state.customPizza[type] = { name, price: Number(price), cal: Number(cal) };
+  ep_state.customPizza[type] = { name, price: Number(price), cal: Number(cal) };
   renderCustomPizzaStudio();
 };
 
 window.toggleStudioTopping = function(toppingName) {
-  const list = state.customPizza.toppings;
+  const list = ep_state.customPizza.toppings;
   const idx = list.indexOf(toppingName);
   if (idx >= 0) {
     list.splice(idx, 1);
@@ -1015,8 +1015,8 @@ window.toggleStudioTopping = function(toppingName) {
 };
 
 window.addCustomStudioPizzaToCart = function() {
-  const c = state.customPizza;
-  const toppingObjects = TOPPING_CATALOG.filter((t) => c.toppings.includes(t.name));
+  const c = ep_state.customPizza;
+  const toppingObjects = ep_TOPPING_CATALOG.filter((t) => c.toppings.includes(t.name));
   const toppingsPrice = toppingObjects.reduce((acc, t) => acc + t.price, 0);
   const totalPrice = c.size.price + c.crust.price + c.sauce.price + c.drizzle.price + toppingsPrice;
   const topList = c.toppings.length ? c.toppings.join(", ") : "Classic Fior di Latte Cheese";
@@ -1032,11 +1032,11 @@ window.addCustomStudioPizzaToCart = function() {
 
 // Cart Management & Drawer
 function addItemToCartObject(itemObj) {
-  const existing = state.cart.find((c) => c.id === itemObj.id && c.meta === itemObj.meta);
+  const existing = ep_state.cart.find((c) => c.id === itemObj.id && c.meta === itemObj.meta);
   if (existing) {
     existing.qty += 1;
   } else {
-    state.cart.push({
+    ep_state.cart.push({
       cartId: `ci_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
       id: itemObj.id,
       name: itemObj.name,
@@ -1046,19 +1046,19 @@ function addItemToCartObject(itemObj) {
       image_key: itemObj.image_key || "hero_margherita"
     });
   }
-  saveStorage("ely_cart_v2", state.cart);
+  saveStorage("ep_cart_v3", ep_state.cart);
   renderCartDrawer();
   showToast(`Added ${itemObj.name}`, `${itemObj.meta} • ₹${itemObj.price}`);
 }
 
 window.updateCartQty = function(cartId, delta) {
-  const item = state.cart.find((c) => c.cartId === cartId);
+  const item = ep_state.cart.find((c) => c.cartId === cartId);
   if (!item) return;
   item.qty += delta;
   if (item.qty <= 0) {
-    state.cart = state.cart.filter((c) => c.cartId !== cartId);
+    ep_state.cart = ep_state.cart.filter((c) => c.cartId !== cartId);
   }
-  saveStorage("ely_cart_v2", state.cart);
+  saveStorage("ep_cart_v3", ep_state.cart);
   renderCartDrawer();
 };
 
@@ -1074,13 +1074,13 @@ window.toggleCartDrawer = function(forceOpen) {
 };
 
 function calculateCartTotals() {
-  const subtotal = state.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const discPct = Number(state.settings.discount_percent || 0);
+  const subtotal = ep_state.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const discPct = Number(ep_state.settings.discount_percent || 0);
   const discountAmount = Math.round((subtotal * discPct) / 100);
   const afterDiscount = Math.max(0, subtotal - discountAmount);
   const gstTax = Math.round(afterDiscount * 0.05);
-  const threshold = Number(state.settings.free_delivery_threshold || 699);
-  const baseDelivery = state.orderMode === "Delivery" ? Number(state.settings.delivery_fee || 49) : 0;
+  const threshold = Number(ep_state.settings.free_delivery_threshold || 699);
+  const baseDelivery = ep_state.orderMode === "Delivery" ? Number(ep_state.settings.delivery_fee || 49) : 0;
   const deliveryCharge = subtotal === 0 || afterDiscount >= threshold ? 0 : baseDelivery;
   const grandTotal = afterDiscount + gstTax + deliveryCharge;
 
@@ -1088,7 +1088,7 @@ function calculateCartTotals() {
 }
 
 function renderCartDrawer() {
-  const totalCount = state.cart.reduce((sum, i) => sum + i.qty, 0);
+  const totalCount = ep_state.cart.reduce((sum, i) => sum + i.qty, 0);
   const badge = document.getElementById("header-cart-count");
   if (badge) badge.textContent = String(totalCount);
 
@@ -1096,7 +1096,7 @@ function renderCartDrawer() {
   const totalsBox = document.getElementById("cart-totals-summary");
   if (!itemsList || !totalsBox) return;
 
-  if (state.cart.length === 0) {
+  if (ep_state.cart.length === 0) {
     itemsList.innerHTML = `
       <div class="text-center py-12 px-4">
         <div class="w-16 h-16 rounded-full bg-amber-50 border border-amber-200 mx-auto flex items-center justify-center text-2xl">🍕</div>
@@ -1108,7 +1108,7 @@ function renderCartDrawer() {
     return;
   }
 
-  itemsList.innerHTML = state.cart.map((item) => `
+  itemsList.innerHTML = ep_state.cart.map((item) => `
     <div class="flex items-center gap-3 p-3 rounded-xl bg-amber-50/40 border border-amber-200/60">
       <img src="${resolveImage(item.image_key)}" alt="${item.name}" class="w-16 h-16 rounded-lg object-cover shrink-0 border border-amber-200" />
       <div class="flex-1 min-w-0">
@@ -1132,7 +1132,7 @@ function renderCartDrawer() {
         <span class="font-semibold text-slate-800">₹${subtotal}</span>
       </div>
       <div class="flex justify-between text-emerald-700 font-medium">
-        <span>Festive Privilege (${state.settings.promo_code} • ${discPct}% Off)</span>
+        <span>Festive Privilege (${ep_state.settings.promo_code} • ${discPct}% Off)</span>
         <span>-₹${discountAmount}</span>
       </div>
       <div class="flex justify-between text-slate-600">
@@ -1140,7 +1140,7 @@ function renderCartDrawer() {
         <span>₹${gstTax}</span>
       </div>
       <div class="flex justify-between text-slate-600">
-        <span>Hot-Box Delivery (${state.orderMode})</span>
+        <span>Hot-Box Delivery (${ep_state.orderMode})</span>
         <span>${deliveryCharge === 0 ? `<strong class="text-emerald-700">FREE</strong>` : `₹${deliveryCharge}`}</span>
       </div>
       <div class="flex justify-between text-base font-extrabold text-slate-900 pt-2 border-t border-slate-200">
@@ -1154,7 +1154,7 @@ function renderCartDrawer() {
 // Checkout Flow (Persists to state + attempts Netlify /api/orders POST)
 window.submitCustomerOrder = async function(event) {
   if (event) event.preventDefault();
-  if (state.cart.length === 0) {
+  if (ep_state.cart.length === 0) {
     showToast("Your Basket is Empty", "Please add a pizza or box meal before placing an order.");
     return;
   }
@@ -1178,9 +1178,9 @@ window.submitCustomerOrder = async function(event) {
     customer_name: name,
     customer_phone: phone,
     customer_email: email,
-    delivery_type: state.orderMode,
+    delivery_type: ep_state.orderMode,
     address,
-    items: state.cart.map((c) => ({ name: `${c.name} (${c.meta})`, qty: c.qty, price: c.price })),
+    items: ep_state.cart.map((c) => ({ name: `${c.name} (${c.meta})`, qty: c.qty, price: c.price })),
     subtotal: totals.subtotal,
     discount_amount: totals.discountAmount,
     tax_amount: totals.gstTax,
@@ -1194,11 +1194,11 @@ window.submitCustomerOrder = async function(event) {
     rider: "Assigning EV Hot-Box Rider"
   };
 
-  state.orders.unshift(newOrder);
-  saveStorage("ely_orders_v2", state.orders);
-  state.activeTrackerOrderId = newOrderId;
-  state.cart = [];
-  saveStorage("ely_cart_v2", state.cart);
+  ep_state.orders.unshift(newOrder);
+  saveStorage("ep_orders_v3", ep_state.orders);
+  ep_state.activeTrackerOrderId = newOrderId;
+  ep_state.cart = [];
+  saveStorage("ep_cart_v3", ep_state.cart);
 
   // Non-blocking sync to Netlify Function when hosted on Netlify
   try {
@@ -1218,11 +1218,11 @@ window.submitCustomerOrder = async function(event) {
 
 // Live 5-Stage Order Tracker
 function renderOrderTracker() {
-  const order = state.orders.find((o) => o.id === state.activeTrackerOrderId) || state.orders[0];
+  const order = ep_state.orders.find((o) => o.id === ep_state.activeTrackerOrderId) || ep_state.orders[0];
   const container = document.getElementById("live-order-tracker-card");
   if (!container || !order) return;
 
-  const currentStageIdx = Math.max(0, ORDER_STAGES.indexOf(order.status));
+  const currentStageIdx = Math.max(0, ep_ORDER_STAGES.indexOf(order.status));
 
   container.innerHTML = `
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-amber-200/70">
@@ -1238,13 +1238,13 @@ function renderOrderTracker() {
       <div class="flex flex-wrap items-center gap-2">
         <label class="text-xs font-semibold text-slate-600">Switch Order:</label>
         <select onchange="selectTrackedOrder(this.value)" class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-800">
-          ${state.orders.map((o) => `<option value="${o.id}" ${o.id === order.id ? "selected" : ""}>#${o.id} — ${o.customer_name} (₹${o.total_amount})</option>`).join("")}
+          ${ep_state.orders.map((o) => `<option value="${o.id}" ${o.id === order.id ? "selected" : ""}>#${o.id} — ${o.customer_name} (₹${o.total_amount})</option>`).join("")}
         </select>
       </div>
     </div>
 
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 my-6">
-      ${ORDER_STAGES.map((stageName, idx) => {
+      ${ep_ORDER_STAGES.map((stageName, idx) => {
         const done = idx <= currentStageIdx;
         const current = idx === currentStageIdx;
         return `
@@ -1293,17 +1293,17 @@ function renderOrderTracker() {
 }
 
 window.selectTrackedOrder = function(orderId) {
-  state.activeTrackerOrderId = orderId;
+  ep_state.activeTrackerOrderId = orderId;
   renderOrderTracker();
 };
 
 window.advanceTrackerStageDemo = function(orderId) {
-  const order = state.orders.find((o) => o.id === orderId);
+  const order = ep_state.orders.find((o) => o.id === orderId);
   if (!order) return;
-  const idx = ORDER_STAGES.indexOf(order.status);
-  const nextIdx = (idx + 1) % ORDER_STAGES.length;
+  const idx = ep_ORDER_STAGES.indexOf(order.status);
+  const nextIdx = (idx + 1) % ep_ORDER_STAGES.length;
   order.status = ORDER_STAGES[nextIdx];
-  saveStorage("ely_orders_v2", state.orders);
+  saveStorage("ep_orders_v3", ep_state.orders);
   renderOrderTracker();
   showToast(`Order #${order.id} Updated`, `Current Stage: ${order.status}`, "emerald");
 };
@@ -1312,7 +1312,7 @@ window.advanceTrackerStageDemo = function(orderId) {
 function renderBlogSection() {
   const grid = document.getElementById("blog-posts-grid");
   if (!grid) return;
-  grid.innerHTML = state.blogs.map((post) => `
+  grid.innerHTML = ep_state.blogs.map((post) => `
     <article class="surface-card overflow-hidden flex flex-col justify-between">
       <div>
         <div class="relative h-48 overflow-hidden bg-amber-50">
@@ -1345,7 +1345,7 @@ function renderBlogSection() {
 }
 
 window.openBlogReaderModal = function(blogId) {
-  const post = state.blogs.find((b) => b.id === blogId);
+  const post = ep_state.blogs.find((b) => b.id === blogId);
   const modal = document.getElementById("blog-reader-modal");
   const content = document.getElementById("blog-reader-content");
   if (!post || !modal || !content) return;
@@ -1379,7 +1379,7 @@ window.closeBlogReaderModal = function() {
 function renderTestimonialsSection() {
   const grid = document.getElementById("testimonials-grid");
   if (!grid) return;
-  grid.innerHTML = state.testimonials.map((t) => `
+  grid.innerHTML = ep_state.testimonials.map((t) => `
     <div class="surface-card p-5 flex flex-col justify-between">
       <div>
         <div class="flex items-center justify-between mb-3">
@@ -1424,8 +1424,8 @@ window.submitGuestTestimonial = function(event) {
     verified: true
   };
 
-  state.testimonials.unshift(newReview);
-  saveStorage("ely_testimonials_v2", state.testimonials);
+  ep_state.testimonials.unshift(newReview);
+  saveStorage("ep_testimonials_v3", ep_state.testimonials);
 
   try {
     fetch("/api/testimonials", {
@@ -1467,8 +1467,8 @@ window.submitContactInquiry = function(event) {
     created_at: "Just Now"
   };
 
-  state.contacts.unshift(inquiry);
-  saveStorage("ely_contacts_v2", state.contacts);
+  ep_state.contacts.unshift(inquiry);
+  saveStorage("ep_contacts_v3", ep_state.contacts);
 
   try {
     fetch("/api/contacts", {
@@ -1492,9 +1492,9 @@ window.submitNewsletterSignup = function(event) {
     return;
   }
 
-  if (!state.subscribers.some((s) => s.email.toLowerCase() === email.toLowerCase())) {
-    state.subscribers.unshift({ email, subscribed_at: "Today" });
-    saveStorage("ely_subscribers_v2", state.subscribers);
+  if (!ep_state.subscribers.some((s) => s.email.toLowerCase() === email.toLowerCase())) {
+    ep_state.subscribers.unshift({ email, subscribed_at: "Today" });
+    saveStorage("ep_subscribers_v3", ep_state.subscribers);
   }
 
   try {
@@ -1506,7 +1506,7 @@ window.submitNewsletterSignup = function(event) {
   } catch (_) {}
 
   if (emailInput) emailInput.value = "";
-  showToast("Welcome to The Golden Crust Society!", `Use your member privilege code ${state.settings.promo_code} for ${state.settings.discount_percent}% off!`, "emerald");
+  showToast("Welcome to The Golden Crust Society!", `Use your member privilege code ${ep_state.settings.promo_code} for ${ep_state.settings.discount_percent}% off!`, "emerald");
 };
 
 /* ==========================================================================
@@ -1514,7 +1514,7 @@ window.submitNewsletterSignup = function(event) {
    ========================================================================== */
 
 window.openAdminPortalModal = function() {
-  if (state.isAdminAuthenticated) {
+  if (ep_state.isAdminAuthenticated) {
     showAdminPortalView();
     return;
   }
@@ -1569,8 +1569,8 @@ window.handleAdminLoginSubmit = async function(event) {
     return;
   }
 
-  state.isAdminAuthenticated = true;
-  state.adminCredentials = { username, password };
+  ep_state.isAdminAuthenticated = true;
+  ep_state.adminCredentials = { username, password };
   closeAdminLoginModal();
   showAdminPortalView();
   showToast("Admin Session Active", "Welcome to the Elysium Pizza Management & Documentation Suite.", "emerald");
@@ -1598,26 +1598,26 @@ window.exitAdminPortalToSite = function() {
 };
 
 window.logoutAdminSession = function() {
-  state.isAdminAuthenticated = false;
-  state.adminCredentials = { username: "", password: "" };
+  ep_state.isAdminAuthenticated = false;
+  ep_state.adminCredentials = { username: "", password: "" };
   exitAdminPortalToSite();
   showToast("Signed Out", "You have logged out of the Admin Portal.");
 };
 
 window.switchAdminTab = function(tabName) {
-  state.activeAdminTab = tabName;
+  ep_state.activeAdminTab = tabName;
   renderAdminPortal();
 };
 
 function renderAdminPortal() {
-  if (!state.isAdminAuthenticated) return;
+  if (!ep_state.isAdminAuthenticated) return;
 
   const tabs = [
     { id: "overview", label: "📊 Overview & KPIs" },
     { id: "festive", label: "🎉 Festive Banners & Theme" },
-    { id: "menu", label: "🍕 Menu CRUD (${state.menu.length})" },
-    { id: "orders", label: "🛵 Customer Orders (${state.orders.length})" },
-    { id: "blogs", label: "📰 Blog Posts (${state.blogs.length})" },
+    { id: "menu", label: "🍕 Menu CRUD (${ep_state.menu.length})" },
+    { id: "orders", label: "🛵 Customer Orders (${ep_state.orders.length})" },
+    { id: "blogs", label: "📰 Blog Posts (${ep_state.blogs.length})" },
     { id: "crm", label: "💬 Testimonials & Contacts" },
     { id: "docs", label: "📘 Admin Guide & CORS API Docs" }
   ];
@@ -1627,14 +1627,14 @@ function renderAdminPortal() {
     tabBar.innerHTML = [
       { id: "overview", label: "📊 Overview" },
       { id: "festive", label: "🎉 Festive Theme & Discounts" },
-      { id: "menu", label: `🍕 Menu Items (${state.menu.length})` },
-      { id: "orders", label: `🛵 Live Orders (${state.orders.length})` },
-      { id: "blogs", label: `📰 Blog Posts (${state.blogs.length})` },
-      { id: "crm", label: `💬 Reviews & Contacts (${state.testimonials.length + state.contacts.length})` },
+      { id: "menu", label: `🍕 Menu Items (${ep_state.menu.length})` },
+      { id: "orders", label: `🛵 Live Orders (${ep_state.orders.length})` },
+      { id: "blogs", label: `📰 Blog Posts (${ep_state.blogs.length})` },
+      { id: "crm", label: `💬 Reviews & Contacts (${ep_state.testimonials.length + ep_state.contacts.length})` },
       { id: "docs", label: "📘 Admin Aid & CORS API Docs" }
     ].map((t) => `
       <button onclick="switchAdminTab('${t.id}')" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-        state.activeAdminTab === t.id
+        ep_state.activeAdminTab === t.id
           ? "btn-brand shadow-sm"
           : "bg-white text-slate-700 border border-slate-200 hover:border-rose-300"
       }">
@@ -1647,34 +1647,34 @@ function renderAdminPortal() {
   panes.forEach((p) => {
     const el = document.getElementById(`admin-pane-${p}`);
     if (el) {
-      el.classList.toggle("hidden", p !== state.activeAdminTab);
+      el.classList.toggle("hidden", p !== ep_state.activeAdminTab);
     }
   });
 
   // 1. Overview KPIs
-  const totalRev = state.orders.reduce((sum, o) => sum + Number(o.total_amount || 0), 0);
+  const totalRev = ep_state.orders.reduce((sum, o) => sum + Number(o.total_amount || 0), 0);
   const kpiBox = document.getElementById("admin-kpi-cards");
   if (kpiBox) {
     kpiBox.innerHTML = `
       <div class="surface-card p-5">
         <span class="text-xs font-bold uppercase text-slate-400">Gross Order Revenue</span>
         <div class="text-2xl font-extrabold text-slate-900 mt-1">₹${totalRev.toLocaleString("en-IN")}</div>
-        <span class="text-xs text-emerald-700 font-semibold mt-1 inline-block">Across ${state.orders.length} active & fulfilled orders</span>
+        <span class="text-xs text-emerald-700 font-semibold mt-1 inline-block">Across ${ep_state.orders.length} active & fulfilled orders</span>
       </div>
       <div class="surface-card p-5">
         <span class="text-xs font-bold uppercase text-slate-400">Active Festive Theme</span>
-        <div class="text-xl font-extrabold text-brand mt-1 capitalize">${state.settings.active_festival} (${state.settings.discount_percent}% Off)</div>
-        <span class="text-xs text-slate-500 mt-1 inline-block">Promo Code: <strong>${state.settings.promo_code}</strong></span>
+        <div class="text-xl font-extrabold text-brand mt-1 capitalize">${ep_state.settings.active_festival} (${ep_state.settings.discount_percent}% Off)</div>
+        <span class="text-xs text-slate-500 mt-1 inline-block">Promo Code: <strong>${ep_state.settings.promo_code}</strong></span>
       </div>
       <div class="surface-card p-5">
         <span class="text-xs font-bold uppercase text-slate-400">Active Menu Dishes</span>
-        <div class="text-2xl font-extrabold text-slate-900 mt-1">${state.menu.length} Items</div>
-        <span class="text-xs text-slate-500 mt-1 inline-block">${state.menu.filter((m) => m.is_veg).length} Pure Veg • ${state.menu.filter((m) => !m.is_veg).length} Non-Veg</span>
+        <div class="text-2xl font-extrabold text-slate-900 mt-1">${ep_state.menu.length} Items</div>
+        <span class="text-xs text-slate-500 mt-1 inline-block">${ep_state.menu.filter((m) => m.is_veg).length} Pure Veg • ${ep_state.menu.filter((m) => !m.is_veg).length} Non-Veg</span>
       </div>
       <div class="surface-card p-5">
         <span class="text-xs font-bold uppercase text-slate-400">Community & CRM</span>
-        <div class="text-2xl font-extrabold text-slate-900 mt-1">${state.testimonials.length} Reviews • ${state.contacts.length} Inquiries</div>
-        <span class="text-xs text-emerald-700 font-semibold mt-1 inline-block">${state.subscribers.length} Newsletter Members</span>
+        <div class="text-2xl font-extrabold text-slate-900 mt-1">${ep_state.testimonials.length} Reviews • ${ep_state.contacts.length} Inquiries</div>
+        <span class="text-xs text-emerald-700 font-semibold mt-1 inline-block">${ep_state.subscribers.length} Newsletter Members</span>
       </div>
     `;
   }
@@ -1689,19 +1689,19 @@ function renderAdminPortal() {
   const delFee = document.getElementById("admin-delivery-fee");
   const freeThresh = document.getElementById("admin-free-threshold");
 
-  if (festSelect) festSelect.value = state.settings.active_festival || "default";
-  if (bannerToggle) bannerToggle.checked = state.settings.banner_enabled !== false;
-  if (bannerTitle) bannerTitle.value = state.settings.banner_title || "";
-  if (bannerSub) bannerSub.value = state.settings.banner_subtitle || "";
-  if (promoCode) promoCode.value = state.settings.promo_code || "ELYSIUM15";
-  if (discRate) discRate.value = state.settings.discount_percent || 15;
-  if (delFee) delFee.value = state.settings.delivery_fee ?? 49;
-  if (freeThresh) freeThresh.value = state.settings.free_delivery_threshold ?? 699;
+  if (festSelect) festSelect.value = ep_state.settings.active_festival || "default";
+  if (bannerToggle) bannerToggle.checked = ep_state.settings.banner_enabled !== false;
+  if (bannerTitle) bannerTitle.value = ep_state.settings.banner_title || "";
+  if (bannerSub) bannerSub.value = ep_state.settings.banner_subtitle || "";
+  if (promoCode) promoCode.value = ep_state.settings.promo_code || "ELYSIUM15";
+  if (discRate) discRate.value = ep_state.settings.discount_percent || 15;
+  if (delFee) delFee.value = ep_state.settings.delivery_fee ?? 49;
+  if (freeThresh) freeThresh.value = ep_state.settings.free_delivery_threshold ?? 699;
 
   // 3. Populate Menu CRUD Table
   const menuTable = document.getElementById("admin-menu-table-body");
   if (menuTable) {
-    menuTable.innerHTML = state.menu.map((item) => `
+    menuTable.innerHTML = ep_state.menu.map((item) => `
       <tr class="border-b border-slate-100 hover:bg-amber-50/30">
         <td class="py-3 px-4">
           <div class="flex items-center gap-3">
@@ -1730,7 +1730,7 @@ function renderAdminPortal() {
   // 4. Populate Admin Orders Table
   const ordersTable = document.getElementById("admin-orders-list");
   if (ordersTable) {
-    ordersTable.innerHTML = state.orders.map((ord) => `
+    ordersTable.innerHTML = ep_state.orders.map((ord) => `
       <div class="surface-card p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
           <div class="flex flex-wrap items-center gap-2">
@@ -1747,7 +1747,7 @@ function renderAdminPortal() {
             <span class="text-base font-extrabold text-brand">₹${ord.total_amount}</span>
           </div>
           <select onchange="updateAdminOrderStatus('${ord.id}', this.value)" class="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-800">
-            ${ORDER_STAGES.map((st) => `<option value="${st}" ${st === ord.status ? "selected" : ""}>${st}</option>`).join("")}
+            ${ep_ORDER_STAGES.map((st) => `<option value="${st}" ${st === ord.status ? "selected" : ""}>${st}</option>`).join("")}
             <option value="Cancelled" ${ord.status === "Cancelled" ? "selected" : ""}>Cancelled</option>
           </select>
           <button onclick="deleteAdminOrder('${ord.id}')" class="px-3 py-2 rounded-xl text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">Delete</button>
@@ -1759,7 +1759,7 @@ function renderAdminPortal() {
   // 5. Populate Admin Blog List
   const blogList = document.getElementById("admin-blogs-list");
   if (blogList) {
-    blogList.innerHTML = state.blogs.map((b) => `
+    blogList.innerHTML = ep_state.blogs.map((b) => `
       <div class="surface-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div class="flex items-center gap-3">
           <img src="${resolveImage(b.image_key)}" alt="${b.title}" class="w-14 h-14 rounded-xl object-cover border border-slate-200 shrink-0" />
@@ -1780,7 +1780,7 @@ function renderAdminPortal() {
   // 6. Populate Admin Testimonials & Contacts CRM
   const revList = document.getElementById("admin-testimonials-list");
   if (revList) {
-    revList.innerHTML = state.testimonials.map((t) => `
+    revList.innerHTML = ep_state.testimonials.map((t) => `
       <div class="p-3.5 rounded-xl bg-white border border-slate-200 flex items-start justify-between gap-3">
         <div>
           <div class="flex items-center gap-2">
@@ -1796,7 +1796,7 @@ function renderAdminPortal() {
 
   const contactList = document.getElementById("admin-contacts-list");
   if (contactList) {
-    contactList.innerHTML = state.contacts.map((c) => `
+    contactList.innerHTML = ep_state.contacts.map((c) => `
       <div class="p-3.5 rounded-xl bg-white border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <div class="flex flex-wrap items-center gap-2">
@@ -1821,9 +1821,9 @@ function renderAdminPortal() {
 
 // Admin Festive Preset Selection & Save
 window.applyFestivalPresetInAdmin = function(festivalKey) {
-  const preset = FESTIVAL_PRESETS[festivalKey] || FESTIVAL_PRESETS.default;
-  state.settings = { ...preset };
-  saveStorage("ely_settings_v2", state.settings);
+  const preset = ep_FESTIVAL_PRESETS[festivalKey] || ep_FESTIVAL_PRESETS.default;
+  ep_state.settings = { ...preset };
+  saveStorage("ep_settings_v3", ep_state.settings);
   applyFestiveThemeToDOM();
   renderAdminPortal();
   renderCartDrawer();
@@ -1832,7 +1832,7 @@ window.applyFestivalPresetInAdmin = function(festivalKey) {
 
 window.saveCustomFestiveSettings = function(event) {
   if (event) event.preventDefault();
-  state.settings = {
+  ep_state.settings = {
     active_festival: document.getElementById("admin-festival-select")?.value || "default",
     banner_enabled: Boolean(document.getElementById("admin-banner-enabled")?.checked),
     banner_title: (document.getElementById("admin-banner-title")?.value || "").trim(),
@@ -1843,7 +1843,7 @@ window.saveCustomFestiveSettings = function(event) {
     free_delivery_threshold: Number(document.getElementById("admin-free-threshold")?.value || 699)
   };
 
-  saveStorage("ely_settings_v2", state.settings);
+  saveStorage("ep_settings_v3", ep_state.settings);
   applyFestiveThemeToDOM();
   renderCartDrawer();
   renderAdminPortal();
@@ -1853,21 +1853,21 @@ window.saveCustomFestiveSettings = function(event) {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "X-Admin-Username": state.adminCredentials.username,
-        "X-Admin-Password": state.adminCredentials.password
+        "X-Admin-Username": ep_state.adminCredentials.username,
+        "X-Admin-Password": ep_state.adminCredentials.password
       },
-      body: JSON.stringify(state.settings)
+      body: JSON.stringify(ep_state.settings)
     }).catch(() => {});
   } catch (_) {}
 
-  showToast("Festive Settings Published!", `Active Theme: ${state.settings.active_festival.toUpperCase()} (${state.settings.discount_percent}% Off)`, "emerald");
+  showToast("Festive Settings Published!", `Active Theme: ${ep_state.settings.active_festival.toUpperCase()} (${ep_state.settings.discount_percent}% Off)`, "emerald");
 };
 
 // Admin Menu CRUD Handlers
 window.loadMenuItemIntoForm = function(itemId) {
-  const item = state.menu.find((m) => m.id === itemId);
+  const item = ep_state.menu.find((m) => m.id === itemId);
   if (!item) return;
-  state.editingMenuId = item.id;
+  ep_state.editingMenuId = item.id;
   document.getElementById("admin-menu-name").value = item.name;
   document.getElementById("admin-menu-category").value = item.category;
   document.getElementById("admin-menu-price").value = item.price;
@@ -1885,7 +1885,7 @@ window.loadMenuItemIntoForm = function(itemId) {
 };
 
 window.resetAdminMenuForm = function() {
-  state.editingMenuId = null;
+  ep_state.editingMenuId = null;
   document.getElementById("admin-menu-form")?.reset();
   const submitBtn = document.getElementById("admin-menu-submit-btn");
   if (submitBtn) submitBtn.textContent = "+ Save Dish to Menu";
@@ -1910,7 +1910,7 @@ window.saveAdminMenuItem = function(event) {
     return;
   }
 
-  const id = state.editingMenuId || `item-${Date.now()}`;
+  const id = ep_state.editingMenuId || `item-${Date.now()}`;
   const dishObj = {
     id,
     name,
@@ -1929,14 +1929,14 @@ window.saveAdminMenuItem = function(event) {
     available: true
   };
 
-  const existingIdx = state.menu.findIndex((m) => m.id === id);
+  const existingIdx = ep_state.menu.findIndex((m) => m.id === id);
   if (existingIdx >= 0) {
-    state.menu[existingIdx] = dishObj;
+    ep_state.menu[existingIdx] = dishObj;
   } else {
-    state.menu.unshift(dishObj);
+    ep_state.menu.unshift(dishObj);
   }
 
-  saveStorage("ely_menu_v2", state.menu);
+  saveStorage("ep_menu_v3", ep_state.menu);
   renderMenuSection();
   renderAdminPortal();
   resetAdminMenuForm();
@@ -1946,8 +1946,8 @@ window.saveAdminMenuItem = function(event) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Admin-Username": state.adminCredentials.username,
-        "X-Admin-Password": state.adminCredentials.password
+        "X-Admin-Username": ep_state.adminCredentials.username,
+        "X-Admin-Password": ep_state.adminCredentials.password
       },
       body: JSON.stringify(dishObj)
     }).catch(() => {});
@@ -1957,8 +1957,8 @@ window.saveAdminMenuItem = function(event) {
 };
 
 window.deleteAdminMenuItem = function(itemId) {
-  state.menu = state.menu.filter((m) => m.id !== itemId);
-  saveStorage("ely_menu_v2", state.menu);
+  ep_state.menu = ep_state.menu.filter((m) => m.id !== itemId);
+  saveStorage("ep_menu_v3", ep_state.menu);
   renderMenuSection();
   renderAdminPortal();
   showToast("Dish Removed", "The item was deleted from the menu catalog.");
@@ -1966,18 +1966,18 @@ window.deleteAdminMenuItem = function(itemId) {
 
 // Admin Order Handlers
 window.updateAdminOrderStatus = function(orderId, newStatus) {
-  const ord = state.orders.find((o) => o.id === orderId);
+  const ord = ep_state.orders.find((o) => o.id === orderId);
   if (!ord) return;
   ord.status = newStatus;
-  saveStorage("ely_orders_v2", state.orders);
+  saveStorage("ep_orders_v3", ep_state.orders);
   renderOrderTracker();
   renderAdminPortal();
   showToast(`Order #${orderId} Updated`, `Status set to "${newStatus}"`, "emerald");
 };
 
 window.deleteAdminOrder = function(orderId) {
-  state.orders = state.orders.filter((o) => o.id !== orderId);
-  saveStorage("ely_orders_v2", state.orders);
+  ep_state.orders = ep_state.orders.filter((o) => o.id !== orderId);
+  saveStorage("ep_orders_v3", ep_state.orders);
   renderOrderTracker();
   renderAdminPortal();
   showToast("Order Record Removed", `Deleted order #${orderId}`);
@@ -1985,9 +1985,9 @@ window.deleteAdminOrder = function(orderId) {
 
 // Admin Blog Handlers
 window.loadBlogIntoAdminForm = function(blogId) {
-  const b = state.blogs.find((x) => x.id === blogId);
+  const b = ep_state.blogs.find((x) => x.id === blogId);
   if (!b) return;
-  state.editingBlogId = b.id;
+  ep_state.editingBlogId = b.id;
   document.getElementById("admin-blog-title").value = b.title;
   document.getElementById("admin-blog-category").value = b.category;
   document.getElementById("admin-blog-author").value = b.author;
@@ -2011,7 +2011,7 @@ window.saveAdminBlogPost = function(event) {
     return;
   }
 
-  const id = state.editingBlogId || `blog-${Date.now()}`;
+  const id = ep_state.editingBlogId || `blog-${Date.now()}`;
   const blogObj = {
     id,
     title,
@@ -2026,24 +2026,24 @@ window.saveAdminBlogPost = function(event) {
     featured: false
   };
 
-  const idx = state.blogs.findIndex((b) => b.id === id);
+  const idx = ep_state.blogs.findIndex((b) => b.id === id);
   if (idx >= 0) {
-    state.blogs[idx] = blogObj;
+    ep_state.blogs[idx] = blogObj;
   } else {
-    state.blogs.unshift(blogObj);
+    ep_state.blogs.unshift(blogObj);
   }
 
-  state.editingBlogId = null;
+  ep_state.editingBlogId = null;
   document.getElementById("admin-blog-form")?.reset();
-  saveStorage("ely_blogs_v2", state.blogs);
+  saveStorage("ep_blogs_v3", ep_state.blogs);
   renderBlogSection();
   renderAdminPortal();
   showToast("Journal Article Published", `"${title}" is now live in The Elysium Journal.`, "emerald");
 };
 
 window.deleteAdminBlogPost = function(blogId) {
-  state.blogs = state.blogs.filter((b) => b.id !== blogId);
-  saveStorage("ely_blogs_v2", state.blogs);
+  ep_state.blogs = ep_state.blogs.filter((b) => b.id !== blogId);
+  saveStorage("ep_blogs_v3", ep_state.blogs);
   renderBlogSection();
   renderAdminPortal();
   showToast("Blog Article Deleted", "Removed from The Elysium Journal.");
@@ -2051,25 +2051,25 @@ window.deleteAdminBlogPost = function(blogId) {
 
 // Admin CRM (Testimonials & Contacts)
 window.deleteAdminTestimonial = function(revId) {
-  state.testimonials = state.testimonials.filter((t) => t.id !== revId);
-  saveStorage("ely_testimonials_v2", state.testimonials);
+  ep_state.testimonials = ep_state.testimonials.filter((t) => t.id !== revId);
+  saveStorage("ep_testimonials_v3", ep_state.testimonials);
   renderTestimonialsSection();
   renderAdminPortal();
   showToast("Review Deleted", "Removed guest review from the wall.");
 };
 
 window.toggleAdminContactStatus = function(inqId) {
-  const c = state.contacts.find((x) => x.id === inqId);
+  const c = ep_state.contacts.find((x) => x.id === inqId);
   if (!c) return;
   c.status = c.status === "Resolved" ? "New Inquiry" : "Resolved";
-  saveStorage("ely_contacts_v2", state.contacts);
+  saveStorage("ep_contacts_v3", ep_state.contacts);
   renderAdminPortal();
   showToast("Inquiry Updated", `Marked as ${c.status}`, "emerald");
 };
 
 window.deleteAdminContact = function(inqId) {
-  state.contacts = state.contacts.filter((x) => x.id !== inqId);
-  saveStorage("ely_contacts_v2", state.contacts);
+  ep_state.contacts = ep_state.contacts.filter((x) => x.id !== inqId);
+  saveStorage("ep_contacts_v3", ep_state.contacts);
   renderAdminPortal();
   showToast("Inquiry Deleted", "Removed contact message.");
 };
@@ -2083,33 +2083,57 @@ window.runAdminApiSimulator = function(method, endpoint) {
   if (endpoint === "/api/menu") {
     payload = {
       status: 200,
+      ep_table: "ep_menu_items",
+      ep_view: "ep_vw_active_menu_catalog",
       cors_headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
         "Content-Type": "application/json; charset=utf-8"
       },
-      count: state.menu.length,
-      data: state.menu.slice(0, 3)
+      count: ep_state.menu.length,
+      data: ep_state.menu.slice(0, 2).map((m) => ({
+        ep_item_id: m.id,
+        ep_item_name: m.name,
+        ep_category: m.category,
+        ep_price: m.price,
+        ep_calories: m.calories,
+        ep_is_veg: m.is_veg,
+        ep_is_bestseller: m.is_bestseller
+      }))
+    };
+  } else if (endpoint === "/api/analytics") {
+    payload = {
+      status: 200,
+      ep_views: ["ep_vw_order_revenue_summary", "ep_vw_crm_overview", "ep_vw_active_menu_catalog"],
+      ep_revenue_summary: {
+        ep_total_orders_count: ep_state.orders.length,
+        ep_gross_revenue: ep_state.orders.reduce((s, o) => s + Number(o.total_amount || 0), 0)
+      },
+      ep_crm_overview: {
+        ep_total_reviews: ep_state.testimonials.length,
+        ep_open_inquiries: ep_state.contacts.length,
+        ep_total_subscribers: ep_state.subscribers.length
+      }
     };
   } else if (endpoint === "/api/orders") {
     payload = {
       status: 200,
       cors_headers: { "Access-Control-Allow-Origin": "*" },
-      count: state.orders.length,
-      data: state.orders
+      count: ep_state.orders.length,
+      data: ep_state.orders
     };
   } else if (endpoint === "/api/settings") {
     payload = {
       status: 200,
       cors_headers: { "Access-Control-Allow-Origin": "*" },
-      data: state.settings
+      data: ep_state.settings
     };
   } else if (endpoint === "/api/blogs") {
     payload = {
       status: 200,
       cors_headers: { "Access-Control-Allow-Origin": "*" },
-      count: state.blogs.length,
-      data: state.blogs
+      count: ep_state.blogs.length,
+      data: ep_state.blogs
     };
   }
 
